@@ -1,0 +1,1 @@
+  -LF:/Workplace/CPP_PROJECTS/GitHub/FormGenerator/lib  ../src/libform_generator.a -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-system -lsfml-window -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
