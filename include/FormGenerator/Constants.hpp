@@ -18,6 +18,10 @@ const std::string TUFFY_FONT    = "F:/Workplace/CPP_PROJECTS/GitHub/FormGenerato
 constexpr float defaultButtonWidth      = 80;
 constexpr float defaultButtonHeight     = 30;
 
+/* Default textbox configs. */
+constexpr float defaultTextBoxWidth     = 250;
+constexpr float defaultTextBoxHeight    = 100;
+
 /* Default character size. */
 constexpr uint8_t defaultFontSize       = 15;
 

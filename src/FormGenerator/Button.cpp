@@ -13,7 +13,7 @@
 fg::Button::Button(float xPos, float yPos, std::string title) :
     fg::Button()
 {
-    Create(xPos, yPos, defaultButtonWidth, defaultButtonHeight, title, fg::Color{0, 255, 0, 100}, fg::Color{0, 0, 0, 100});
+    Create(xPos, yPos, defaultButtonWidth, defaultButtonHeight, title, fg::Color{0, 255, 0, 255}, fg::Color{0, 0, 0, 255});
 }
 
 fg::Button::Button(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor) :
@@ -28,7 +28,9 @@ void fg::Button::Create(float xPos, float yPos, float width, float height, std::
     {
         shape.setPosition(xPos, yPos);
         shape.setSize(sf::Vector2f(width, height));
-        shape.setFillColor(sf::Color{bgColor.r, bgColor.g, bgColor.b, bgColor.a});
+
+        color = sf::Color{bgColor.r, bgColor.g, bgColor.b, bgColor.a};
+        shape.setFillColor(color);
 
         SetWidgetTitle(title, titleColor);
 
@@ -50,8 +52,14 @@ void fg::Button::Create(float xPos, float yPos, float width, float height, std::
 
 void fg::Button::Draw(sf::RenderWindow& window)
 {
+    /* Display widget. */
     window.draw(shape);
-    window.draw(GetWidgetTitle());
+    
+    /* Display widget title. */
+    if (IsWidgetTitleEnabled() == true)
+    {
+        window.draw(GetWidgetTitle());
+    }
 }
 
 bool fg::Button::IsMouseOver(const sf::RenderWindow& window)
@@ -66,6 +74,16 @@ bool fg::Button::IsMouseOver(const sf::RenderWindow& window)
 
 void fg::Button::TakeAction()
 {
+    /* Get the event and take action accordingly. */
+    sf::Event& event = GetCurrentEvent();
+    if (event.type == sf::Event::MouseButtonPressed)
+    {
+        shape.setFillColor(sf::Color::Red);
+    }
+    else if (event.type == sf::Event::MouseButtonReleased)
+    {
+        shape.setFillColor(color);
+    } 
 }
 
 

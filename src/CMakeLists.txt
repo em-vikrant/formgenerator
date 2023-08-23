@@ -6,7 +6,9 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/FormGenerator)
 
 # All source files
 set(SRC
+    ${SRCROOT}/Widget.cpp
     ${SRCROOT}/Button.cpp
+    ${SRCROOT}/TextBox.cpp
     ${SRCROOT}/FormGenerator.cpp
     )
 

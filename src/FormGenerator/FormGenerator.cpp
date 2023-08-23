@@ -6,8 +6,9 @@
 #include <iostream>
 
 /* FG includes. */
-#include "FormGenerator/FormGenerator.hpp"
 #include "FormGenerator/Button.hpp"
+#include "FormGenerator/TextBox.hpp"
+#include "FormGenerator/FormGenerator.hpp"
 
 
 fg::FormGenerator::FormGenerator()
@@ -55,35 +56,32 @@ void fg::FormGenerator::Update()
 {
     if (formWindow.isOpen())
     {
-        sf::Event event;
         while (formWindow.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            switch (event.type)
             {
-                UnLive();
-            }
-            
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
-                for (auto widget : widgetVector)
-                {
-                    if (widget->IsMouseOver(formWindow))
-                    {
-                        widget->TakeAction();
-                    }
-                }
-            }
+                case sf::Event::Closed:
+                    UnLive();
+                    break;
 
-            if (event.type == sf::Event::MouseButtonReleased)
-            {
-                for (auto widget : widgetVector)
-                {
-                    if (widget->IsMouseOver(formWindow))
+                case sf::Event::MouseButtonPressed:
+                case sf::Event::MouseButtonReleased:
+                case sf::Event::TextEntered:
                     {
-                        // Button released
-                        widget->TakeAction();
+                        for (auto widget : widgetVector)
+                        {
+                            /* Let the widget handle events at their own will. */
+                            widget->SetCurrentEvent(event);
+                            if (widget->IsMouseOver(formWindow))
+                            {
+                                widget->TakeAction();
+                            }
+                        }
                     }
-                }
+                    break;
+
+                default:
+                    break;
             }
         }
     }
@@ -93,9 +91,10 @@ void fg::FormGenerator::AddWidget(fg::WidgetType widgetType, std::string title, 
 {
     if (widgetType == fg::WidgetType::WG_Button)
     {
-        widgetVector.push_back(new fg::Button(xPos, yPos, title));
+        widgetVector.push_back(std::make_shared<fg::Button>(xPos, yPos, title));
     }
     else if (widgetType == fg::WidgetType::WG_TextBox)
     {
+        widgetVector.push_back(std::make_shared<fg::TextBox>(xPos, yPos, title));
     }
 }

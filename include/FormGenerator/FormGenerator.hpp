@@ -7,6 +7,8 @@
 
 /* STD includes. */
 #include <string>
+#include <vector>
+#include <memory>
 
 /* SFML includes. */
 #include <SFML/Window.hpp>
@@ -38,27 +40,31 @@ class fg::FormGenerator
         /* Destructors. */
         ~FormGenerator();
 
-        /* Functions. */
+        /* Formgenerator driver functions. */
         void Create(std::string title, fg::FormDimensions dimensions);
         void Update();
         void Display();
         void Close();
 
-        /* Widget generators. */
+        /* Getters. */
+        sf::Event GetCurrentEvent() { return event; }
+
+        /* Widget generator function. */
         void AddWidget(fg::WidgetType widgetType, std::string title, float xPos, float yPos);
 
         inline bool IsLive() { return isLive; }
         inline void UnLive() { isLive = false; }
 
     private:
-        bool isLive;                        /*! To check if form window is open. */
-        sf::RenderWindow formWindow;        /*! Window instance to hold the form. */
-        sf::String formTitle;               /*! Form title. */
-        sf::Color color;                    /*! Form title. */
-        fg::FormDimensions formDimensions;  /*! Form dimensions. */
+        bool                isLive;         /*! To check if form window is open. */
+        sf::RenderWindow    formWindow;     /*! Window instance to hold the form. */
+        sf::String          formTitle;      /*! Form title. */
+        sf::Color           color;          /*! Form title. */
+        sf::Event           event;          /*! Pointer to the sfml event occured. */
+//        fg::FormDimensions formDimensions;  /*! Form dimensions. */
 
         /* WIDGETS */
-        std::vector<fg::Widget*> widgetVector;
+        std::vector<std::shared_ptr<fg::Widget>> widgetVector;
 };
 
 #endif // FORM_GENERATOR_H

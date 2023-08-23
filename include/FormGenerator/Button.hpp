@@ -41,6 +41,7 @@ class fg::Button : public fg::Widget
 
     private:
         sf::RectangleShape shape;
+        sf::Color color;
         bool isLive;
 };
 

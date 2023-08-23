@@ -1,5 +1,5 @@
 /* File: TextBox.hpp
- * Header file for text box class.
+ * Header file for button class.
  */
 
 #ifndef TEXTBOX_H
@@ -9,33 +9,42 @@
 #include <string>
 
 /* SFML includes. */
+#include <SFML/Graphics.hpp>
+
+/* FG includes. */
+#include <FormGenerator/Constants.hpp>
+#include <FormGenerator/Widget.hpp>
 
 
-using DELETE_KEY = 8;
-using ENTER_KEY = 13;
-using ESCAPE_KEY = 27;
+namespace fg
+{
+    class TextBox;
+}
 
 /* Brief: TextBox class. */
-class TextBox
+class fg::TextBox : public fg::Widget
 {
     public:
-        TextBox(int size, sf::Color color, bool sel);
+        /* Constructor. */
+        TextBox();
+        TextBox(float xPos, float yPos, std::string title);
+        TextBox(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor);
 
-        void SetFont(sf::Font& font);
-        void SetPosition(sf::Vector2f pos);
-        void SetLimit(bool tof);
-        void SetLimit(bool tof, int limit);
-        void SetSelected(bool sel);
+        /* Functions. */
+        void Create(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor);
+        void Draw(sf::RenderWindow& window) override;
+        bool IsMouseOver(const sf::RenderWindow& window) override;
+        void TakeAction() override;
+
+        inline bool IsLive() override { return isLive; }
+        inline void UnLive() override { isLive = false; }
 
     private:
-        sf::Text textBox;
-        std::ostringstream text;
-        bool isSelected = false;
-        bool hasLimit = false;
-        int limit;
-
-        void InputLogic(int charTyped);
-        void DeleteLastChar();
+        sf::RectangleShape shape;
+        sf::Text inlineText;
+        sf::Color color;
+        std::string inputString;
+        bool isLive;
 };
 
 #endif // TEXTBOX_H
