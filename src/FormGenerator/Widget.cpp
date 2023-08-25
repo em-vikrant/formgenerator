@@ -72,7 +72,7 @@ void fg::Widget::LoadDefaultFont()
     }
 }
 
-sf::Font fg::Widget::GetDefaultFont()
+sf::Font& fg::Widget::GetDefaultFont()
 {
     return font;
 }

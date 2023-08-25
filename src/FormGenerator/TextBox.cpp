@@ -19,7 +19,7 @@ fg::TextBox::TextBox()
 fg::TextBox::TextBox(float xPos, float yPos, std::string title) :
     fg::TextBox()
 {
-    Create(xPos, yPos, defaultTextBoxWidth, defaultTextBoxHeight, title, fg::Color{255, 255, 255, 255}, fg::Color{0, 0, 0, 240});
+    Create(xPos, yPos, defaultTextBoxWidth, defaultTextBoxHeight, title, fg::Color{255, 255, 255, 255}, fg::Color{0, 0, 0, 180});
 }
 
 fg::TextBox::TextBox(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor) :
@@ -36,6 +36,7 @@ void fg::TextBox::Create(float xPos, float yPos, float width, float height, std:
         shape.setPosition(xPos, yPos);
         shape.setSize(sf::Vector2f(width, height));
         shape.setOutlineColor(sf::Color::Black);
+        shape.setOutlineThickness(1);
 
         color = sf::Color{bgColor.r, bgColor.g, bgColor.b, bgColor.a};
         shape.setFillColor(color);
@@ -54,8 +55,9 @@ void fg::TextBox::Create(float xPos, float yPos, float width, float height, std:
         inlineText.setFillColor(sf::Color::Black);
 
         sf::FloatRect inlineTextBounds = inlineText.getLocalBounds();
-        inlineText.setOrigin(inlineTextBounds.left + inlineTextBounds.width / 2.0f, inlineTextBounds.top + inlineTextBounds.height / 2.0f);
-        inlineText.setPosition(xPos + 4.0f, yPos + 4.0f);
+//        inlineText.setOrigin(inlineTextBounds.left + inlineTextBounds.width / 2.0f, inlineTextBounds.top + inlineTextBounds.height / 2.0f);
+        inlineText.setOrigin(inlineTextBounds.left, inlineTextBounds.top);
+        inlineText.setPosition(xPos + 20.0f, yPos + 10.0f);
 
         /* Make the button live. */
         isLive = true;
@@ -110,7 +112,7 @@ void fg::TextBox::TakeAction()
             } else if (event.text.unicode != '\b') {
                 inputString += static_cast<char>(event.text.unicode);
             }
-            inlineText.setString(inputString);
+            inlineText.setString(inputString + "|");
         }
     }
 }

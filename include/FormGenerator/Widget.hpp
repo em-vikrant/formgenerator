@@ -91,7 +91,7 @@ class fg::Widget
         void SetWidgetTitlePosition(float xPos, float yPos);
         void SetWidgetTitleCharSize(int size);
 
-        sf::Font GetDefaultFont();
+        sf::Font& GetDefaultFont();
         sf::Event& GetCurrentEvent() { return event; }
 
     private:
