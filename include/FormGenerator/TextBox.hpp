@@ -19,6 +19,9 @@
 namespace fg
 {
     class TextBox;
+
+    /* Preprocess Constants. */
+    constexpr char CURSOR_CHAR = '|';
 }
 
 /* Brief: TextBox class. */
@@ -44,6 +47,7 @@ class fg::TextBox : public fg::Widget
         sf::Text inlineText;
         sf::Color color;
         std::string inputString;
+        std::string cursorChar;
         bool isLive;
 };
 
