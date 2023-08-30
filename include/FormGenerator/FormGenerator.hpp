@@ -61,7 +61,6 @@ class fg::FormGenerator
         sf::String          formTitle;      /*! Form title. */
         sf::Color           color;          /*! Form title. */
         sf::Event           event;          /*! Pointer to the sfml event occured. */
-//        fg::FormDimensions formDimensions;  /*! Form dimensions. */
 
         /* WIDGETS */
         std::vector<std::shared_ptr<fg::Widget>> widgetVector;

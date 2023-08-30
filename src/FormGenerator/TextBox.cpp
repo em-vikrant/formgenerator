@@ -14,7 +14,7 @@ fg::TextBox::TextBox()
 {
     isLive = false;
     cursorChar = std::string(1, fg::CURSOR_CHAR);
-    inputString = std::string(cursorChar);
+    inputString = std::string("");
 }
 
 fg::TextBox::TextBox(float xPos, float yPos, std::string title) :
@@ -57,8 +57,7 @@ void fg::TextBox::Create(float xPos, float yPos, float width, float height, std:
 
         sf::FloatRect inlineTextBounds = inlineText.getLocalBounds();
         inlineText.setOrigin(inlineTextBounds.left + inlineTextBounds.width / 2.0f, inlineTextBounds.top + inlineTextBounds.height / 2.0f);
-//        inlineText.setOrigin(inlineTextBounds.left, inlineTextBounds.top);
-        inlineText.setPosition(xPos + 10.0f, yPos + 10.0f);
+        inlineText.setPosition(xPos + 10.0f, yPos + 15.0f);
 
         /* Make the button live. */
         isLive = true;
@@ -102,25 +101,30 @@ void fg::TextBox::TakeAction()
 {
     static bool IsEnabledForWriting = false;
 
-    /* Get the event and take action accordingly. */
-    sf::Event& event = GetCurrentEvent();
-    if (IsEnabledForWriting == false && event.type == sf::Event::MouseButtonPressed)
+    /* Check and enable text box for text entering. */
+    if (IsEnabledForWriting == false && IsMouseClicked() == true)
     {
         IsEnabledForWriting = true;
-        inlineText.setString(inputString);
+        inlineText.setString(inputString + cursorChar);
 
         /* Disable widget title. */
         DisableWidgetTitle();
     }
+    /* If clicked outside of the text box area. */
+    else if (IsMouseClicked() == false)
+    {
+        IsEnabledForWriting = false;
+        inlineText.setString(inputString);
+    }
     
+    /* Handle text event for the text box. */
+    sf::Event& event = GetCurrentEvent();
     if (IsEnabledForWriting == true && event.type == sf::Event::TextEntered)
     {
         if (event.text.unicode < 128) {
             if (event.text.unicode == '\b' && !inputString.empty()) {
                 inputString.pop_back();
             } else if (event.text.unicode != '\b') {
-                if (inputString == cursorChar)
-                    inputString.pop_back();
                 inputString += static_cast<char>(event.text.unicode);
             }
             inlineText.setString(inputString + cursorChar);

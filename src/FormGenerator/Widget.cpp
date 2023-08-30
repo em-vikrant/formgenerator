@@ -76,3 +76,16 @@ sf::Font& fg::Widget::GetDefaultFont()
 {
     return font;
 }
+
+void fg::Widget::SetMouseState(bool state)
+{
+    mouseHovered = state;
+
+    sf::Event& event = GetCurrentEvent();
+    if (event.type == sf::Event::MouseButtonPressed)
+        mouseClicked = state;
+    else if (event.type == sf::Event::MouseButtonReleased)
+        mouseReleased = state;
+}
+
+

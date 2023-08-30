@@ -63,10 +63,6 @@ class fg::Widget
         virtual void Draw(sf::RenderWindow& window) = 0;
         virtual bool IsMouseOver(const sf::RenderWindow& window) = 0;
         virtual void TakeAction() = 0;
-#if 0
-        virtual void InCtxTakeAction() = 0;
-        virtual void OffCtxTakeAction() = 0;
-#endif
         virtual bool IsLive() = 0;
         virtual void UnLive() = 0;
 
@@ -75,13 +71,17 @@ class fg::Widget
         sf::Text GetWidgetTitle()   { return title; }
         sf::Color GetWidgetColor()  { return titleColor; }
 
-        inline void DisableWidgetTitle()   { isTitleEnable = false; }
-        inline void EnableWidgetTitle()    { isTitleEnable = true; }
+        inline void DisableWidgetTitle()    { isTitleEnable = false; }
+        inline void EnableWidgetTitle()     { isTitleEnable = true; }
 
-        inline bool IsWidgetTitleEnabled() { return isTitleEnable; }
+        inline bool IsWidgetTitleEnabled()  { return isTitleEnable; }
+        inline bool IsMouseClicked()        { return mouseClicked; }
+        inline bool IsMouseHover()          { return mouseHovered; }
+        inline bool IsMouseReleased()       { return mouseReleased; }
 
         /* Setter functions. */
-        void SetCurrentEvent(sf::Event& event) { this->event = event; }
+        void SetCurrentEvent(sf::Event& event)  { this->event = event; }
+        void SetMouseState(bool state);
 
     protected:
         /* Functions to be used by widgets. */
@@ -102,6 +102,10 @@ class fg::Widget
         sf::Font    font;                       /*! Widget title font. */
         bool        isFontSet = false;          /*! Flag that get when font is loaded. */
         sf::Event   event;                      /*! Current event, used when relevant to the widget. */
+
+        bool        mouseClicked;               /*! Mouse clicked status for a widget. */
+        bool        mouseHovered;               /*! Mouse hovering status for a widget. */
+        bool        mouseReleased;              /*! Mouse released status for a widget. */
 
         /* Private functions. */
         void LoadDefaultFont();

@@ -70,12 +70,14 @@ void fg::FormGenerator::Update()
                     {
                         for (auto widget : widgetVector)
                         {
-                            /* Let the widget handle events at their own will. */
+                            /* 1. Let the widget handle events at their own will. */
                             widget->SetCurrentEvent(event);
-                            if (widget->IsMouseOver(formWindow))
-                            {
-                                widget->TakeAction();
-                            }
+
+                            /* 2. Set the mouse state. */
+                            widget->SetMouseState(widget->IsMouseOver(formWindow));
+
+                            /* Let the widget act accordingly. */
+                            widget->TakeAction();
                         }
                     }
                     break;

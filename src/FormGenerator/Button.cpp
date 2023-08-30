@@ -75,15 +75,12 @@ bool fg::Button::IsMouseOver(const sf::RenderWindow& window)
 void fg::Button::TakeAction()
 {
     /* Get the event and take action accordingly. */
-    sf::Event& event = GetCurrentEvent();
-    if (event.type == sf::Event::MouseButtonPressed)
-    {
+    if (IsMouseClicked())
         shape.setFillColor(sf::Color::Red);
-    }
-    else if (event.type == sf::Event::MouseButtonReleased)
-    {
+    else if (IsMouseReleased())
         shape.setFillColor(color);
-    } 
+    else if (IsMouseHover())
+        shape.setFillColor(sf::Color::Blue);
 }
 
 
