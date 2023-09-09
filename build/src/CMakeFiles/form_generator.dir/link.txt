@@ -1,2 +1,0 @@
-C:\TDM-GCC-64\bin\ar.exe qc libform_generator.a CMakeFiles/form_generator.dir/FormGenerator/Button.cpp.obj CMakeFiles/form_generator.dir/FormGenerator/FormGenerator.cpp.obj
-C:\TDM-GCC-64\bin\ranlib.exe libform_generator.a

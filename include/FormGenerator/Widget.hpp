@@ -67,10 +67,6 @@ class fg::Widget
         virtual void UnLive() = 0;
 
         /* Helper functions. */
-        sf::FloatRect GetWidgetTitleBounds() { return title.getLocalBounds(); }
-        sf::Text GetWidgetTitle()   { return title; }
-        sf::Color GetWidgetColor()  { return titleColor; }
-
         inline void DisableWidgetTitle()    { isTitleEnable = false; }
         inline void EnableWidgetTitle()     { isTitleEnable = true; }
 
@@ -83,6 +79,12 @@ class fg::Widget
         void SetCurrentEvent(sf::Event& event)  { this->event = event; }
         void SetMouseState(bool state);
 
+        /* Getter functions. */
+        sf::FloatRect GetWidgetTitleBounds()    { return title.getLocalBounds(); }
+        sf::Text GetWidgetTitle()               { return title; }
+        sf::Color GetWidgetColor()              { return titleColor; }
+        fg::Pair2f& GetWidgetCoordinates()      { return coordinates; }
+
     protected:
         /* Functions to be used by widgets. */
         void SetWidgetTitle(std::string title, fg::Color color);
@@ -90,6 +92,8 @@ class fg::Widget
         void SetWidgetTitleOrigin(float xPos, float yPos);
         void SetWidgetTitlePosition(float xPos, float yPos);
         void SetWidgetTitleCharSize(int size);
+
+        void SetWidgetCoordinates(fg::Pair2f coordinates) { this->coordinates = coordinates; }
 
         sf::Font& GetDefaultFont();
         sf::Event& GetCurrentEvent() { return event; }
@@ -102,6 +106,9 @@ class fg::Widget
         sf::Font    font;                       /*! Widget title font. */
         bool        isFontSet = false;          /*! Flag that get when font is loaded. */
         sf::Event   event;                      /*! Current event, used when relevant to the widget. */
+
+        /* Widget shape. */
+        fg::Pair2f  coordinates;                /*! Top left coordinates of widget. */
 
         bool        mouseClicked;               /*! Mouse clicked status for a widget. */
         bool        mouseHovered;               /*! Mouse hovering status for a widget. */

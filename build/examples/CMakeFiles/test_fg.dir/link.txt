@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\test_fg.dir/objects.a
-C:\TDM-GCC-64\bin\ar.exe qc CMakeFiles\test_fg.dir/objects.a @CMakeFiles\test_fg.dir\objects1.rsp
-C:\TDM-GCC-64\bin\c++.exe -Wall -Werror -DIL_STD -Wno-deprecated -g -Wl,--dependency-file,CMakeFiles\test_fg.dir\link.d -Wl,--whole-archive CMakeFiles\test_fg.dir/objects.a -Wl,--no-whole-archive -o test_fg.exe -Wl,--out-implib,libtest_fg.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\test_fg.dir\linkLibs.rsp
