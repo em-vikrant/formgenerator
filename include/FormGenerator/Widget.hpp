@@ -59,6 +59,9 @@ class fg::Widget
         /* Constructor. */
         Widget() { isFontSet = false; }
 
+        /* Destructor. */
+        virtual ~Widget() {}
+
         /* Pure Virtual functions. */
         virtual void Draw(sf::RenderWindow& window) = 0;
         virtual bool IsMouseOver(const sf::RenderWindow& window) = 0;
