@@ -1,5 +1,5 @@
-/* File: Widgets.hpp
- * Header file to include all the available widgets.
+/* File: Constants.hpp
+ * Header file to include all the constants.
  */
 
 #ifndef CONSTANTS_H
@@ -8,11 +8,15 @@
 /* STD includes. */
 #include <string>
 
+/* # defines. */
+#ifdef _ROOT_PATH
+#define ROOT_PATH _ROOT_PATH
+#endif
 
 /* CONSTANTS. */
-const std::string DEFAULT_FONT  = "resources/fonts/CalibriRegular.ttf";
-const std::string CALIBRI_FONT  = "resources/fonts/CalibriRegular.ttf";
-const std::string TUFFY_FONT    = "resources/fonts/tuffy.ttf";
+const std::string DEFAULT_FONT  = std::string(ROOT_PATH) + std::string("/resources/fonts/CalibriRegular.ttf");
+const std::string CALIBRI_FONT  = std::string(ROOT_PATH) + std::string("/resources/fonts/CalibriRegular.ttf");
+const std::string TUFFY_FONT    = std::string(ROOT_PATH) + std::string("/resources/fonts/tuffy.ttf");
 
 /* Default button configs. */
 constexpr float defaultButtonWidth      = 80;

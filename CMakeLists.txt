@@ -17,8 +17,16 @@ ELSE()
     SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
 ENDIF()
 
+# Compiler definitions
+add_definitions(-D_ROOT_PATH=\"${CMAKE_SOURCE_DIR}\")
+
 # SFML related settings -BEGIN
-set(CMAKE_BUILD_RPATH "${CMAKE_SOURCE_DIR}/../SFML/build/lib")
+IF(WIN32)
+    message(STATUS "[PLATFORM] Windows")
+ELSEIF(UNIX AND APPLE)
+    message(STATUS "[PLATFORM] Unix / MacOS")
+    set(CMAKE_BUILD_RPATH "${CMAKE_SOURCE_DIR}/../SFML/build/lib")
+ENDIF()
 
 set(SFML_INC_PATH "${CMAKE_SOURCE_DIR}/../SFML/include")
 set(SFML_LIB_PATH "${CMAKE_SOURCE_DIR}/../SFML/build/lib")
@@ -30,6 +38,6 @@ add_subdirectory(src)
 option(BUILD_EXAMPLES "BUILD EXAMPLE DIRECTORY" ON)
 
 if (BUILD_EXAMPLES)
-    message(STATUS "Packaging examples...")
+    message(STATUS "BUILDING EXAMPLES PACK")
     add_subdirectory(examples)
 endif()
