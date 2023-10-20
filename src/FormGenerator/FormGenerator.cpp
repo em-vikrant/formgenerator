@@ -6,15 +6,19 @@
 #include <iostream>
 
 /* FG includes. */
-#include "FormGenerator/Button.hpp"
-#include "FormGenerator/TextBox.hpp"
-#include "FormGenerator/FormGenerator.hpp"
+#include <FormGenerator/Button.hpp>
+#include <FormGenerator/TextBox.hpp>
+#include <FormGenerator/FormGenerator.hpp>
 
 
 fg::FormGenerator::FormGenerator()
 {
     this->formTitle = sf::String("Untitled");
     isLive = false;
+
+    /* Configure the project. */
+    pConfig = std::make_shared<fg::utils::Config>();
+    pConfig->ConfigureCurrentApp();
 }
 
 fg::FormGenerator::~FormGenerator()
@@ -23,6 +27,7 @@ fg::FormGenerator::~FormGenerator()
 
 void fg::FormGenerator::Create(std::string title, fg::FormDimensions dimensions)
 {
+    // TODO: Fetch dimensions from the config
     this->formTitle = sf::String(title);
     formWindow.create(sf::VideoMode(dimensions.width, dimensions.height), formTitle); 
     isLive = true;
@@ -91,6 +96,7 @@ void fg::FormGenerator::Update()
 
 void fg::FormGenerator::AddWidget(fg::WidgetType widgetType, std::string title, float xPos, float yPos)
 {
+    // TODO: Addition of widgets from the app config file.
     if (widgetType == fg::WidgetType::WG_Button)
     {
         widgetVector.push_back(std::make_shared<fg::Button>(xPos, yPos, title));

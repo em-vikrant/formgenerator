@@ -1,0 +1,14 @@
+{
+    "library" : "formgenerator",
+    "app" : {
+        "dir" : "examples",
+        "app1" : {
+            "title" : "test_app",
+            "enable" : "true"
+        },
+        "app2" : {
+            "title" : "basic_app",
+            "enable" : "false"
+        }
+    }
+}

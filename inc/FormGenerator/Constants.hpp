@@ -11,12 +11,20 @@
 /* # defines. */
 #ifdef _ROOT_PATH
 #define ROOT_PATH _ROOT_PATH
+#else
+#define ROOT_PATH "."
 #endif
+
 
 /* CONSTANTS. */
 const std::string DEFAULT_FONT  = std::string(ROOT_PATH) + std::string("/resources/fonts/CalibriRegular.ttf");
 const std::string CALIBRI_FONT  = std::string(ROOT_PATH) + std::string("/resources/fonts/CalibriRegular.ttf");
 const std::string TUFFY_FONT    = std::string(ROOT_PATH) + std::string("/resources/fonts/tuffy.ttf");
+
+const std::string EXAMPLES_PATH = ROOT_PATH"/examples";
+const std::string RESOURCE_PATH = ROOT_PATH"/resources";
+
+const std::string CONFIG_FILE   = "config.json";
 
 /* Default button configs. */
 constexpr float defaultButtonWidth      = 80;
@@ -30,3 +38,4 @@ constexpr float defaultTextBoxHeight    = 100;
 constexpr uint8_t defaultFontSize       = 15;
 
 #endif // CONSTANTS_H
+

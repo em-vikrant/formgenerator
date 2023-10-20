@@ -16,6 +16,7 @@
 
 /* FG includes. */
 #include <FormGenerator/Widget.hpp>
+#include <FormGenerator/Utils/Config.hpp>
 
 namespace fg
 {
@@ -64,6 +65,8 @@ class fg::FormGenerator
 
         /* WIDGETS */
         std::vector<std::shared_ptr<fg::Widget>> widgetVector;
+
+        std::shared_ptr<fg::utils::Config> pConfig;
 };
 
 #endif // FORM_GENERATOR_H

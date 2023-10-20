@@ -1,0 +1,18 @@
+{
+    "app" : "test_app",
+    "fdm" : "800:600",
+    "fnt" : "calibri",
+    "fsz" : "15",
+    "B1" : {
+        "typ" : "button",
+        "clr" : "white",
+        "pos" : "300:500",
+        "dmn" : "40:30"
+    },
+    "T1" : {
+        "typ" : "textbox",
+        "clr" : "white",
+        "pos" : "250:400",
+        "dmn" : "40:30"
+    }
+}

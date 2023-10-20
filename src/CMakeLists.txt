@@ -14,6 +14,10 @@ set(SRC
     ${SRCROOT}/TextBox.cpp
     ${INCROOT}/FormGenerator/FormGenerator.hpp
     ${SRCROOT}/FormGenerator.cpp
+    ${INCROOT}/FormGenerator/Utils/Config.hpp
+    ${SRCROOT}/Utils/Config.cpp
+    ${INCROOT}/FormGenerator/Utils/Json.hpp
+    ${SRCROOT}/Utils/Json.cpp
     )
 
 # Add library
