@@ -1,27 +1,28 @@
 // This is a example file to check the FormGenerator library
 #include <iostream>
-#include <FormGenerator/Utils/Json.hpp>
-#include <FormGenerator/Utils/Config.hpp>
 #include <FormGenerator/FormGenerator.hpp>
 
-int main()
+
+int main(int argc, char *argv[])
 {
-    fg::FormGenerator form;
+    fg::FormGenerator form(argv[0]);
     std::cout << "Test App" << std::endl;
 
-    // form.Create("Test Application Form");
-    fg::utils::Config config;
-    config.ConfigureCurrentApp();
-
-    std::vector<std::string> keysVec = {"B1", "T1"};    
-    std::for_each(keysVec.begin(), keysVec.end(), [&](std::string& key)
+    if (form.Create("My Test Form"))
     {
-        std::cout << "MAIN, Fetching values of " << key << std::endl;
-        for (auto kvPair : config.GetValuesFromKey(key))
+        form.SetWidgetInitText("B1", "MYB1");
+        form.SetWidgetInitText("T1", "Write here!");
+
+        while (form.IsLive() == true)
         {
-            std::cout << kvPair.first << " = " << kvPair.second << std::endl;
+            form.Update();
+            form.Display();
         }
-    });
+
+        form.Close();
+    }
+    else
+        std::cerr << "Failed to create form!\n";
 
     return 0;
 }

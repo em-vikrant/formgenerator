@@ -17,25 +17,13 @@
 
 
 /* CONSTANTS. */
-const std::string DEFAULT_FONT  = std::string(ROOT_PATH) + std::string("/resources/fonts/CalibriRegular.ttf");
-const std::string CALIBRI_FONT  = std::string(ROOT_PATH) + std::string("/resources/fonts/CalibriRegular.ttf");
-const std::string TUFFY_FONT    = std::string(ROOT_PATH) + std::string("/resources/fonts/tuffy.ttf");
+const std::string EXAMPLES_PATH         = ROOT_PATH"/examples";
+const std::string RESOURCE_PATH         = ROOT_PATH"/resources";
+const std::string CONFIG_FILE           = "config.json";
+const std::string DEFAULT_FONT          = "calibri";
 
-const std::string EXAMPLES_PATH = ROOT_PATH"/examples";
-const std::string RESOURCE_PATH = ROOT_PATH"/resources";
-
-const std::string CONFIG_FILE   = "config.json";
-
-/* Default button configs. */
-constexpr float defaultButtonWidth      = 80;
-constexpr float defaultButtonHeight     = 30;
-
-/* Default textbox configs. */
-constexpr float defaultTextBoxWidth     = 250;
-constexpr float defaultTextBoxHeight    = 100;
-
-/* Default character size. */
-constexpr uint8_t defaultFontSize       = 15;
+/* Default font size. */
+constexpr uint8_t DEFAULT_FONT_SIZE     = 15;
 
 #endif // CONSTANTS_H
 

@@ -5,14 +5,16 @@
     "fsz" : "15",
     "B1" : {
         "typ" : "button",
-        "clr" : "white",
+        "clr" : "yellow",
         "pos" : "300:500",
-        "dmn" : "40:30"
+        "dmn" : "80:30",
+        "tclr" : "black"
     },
     "T1" : {
         "typ" : "textbox",
         "clr" : "white",
-        "pos" : "250:400",
-        "dmn" : "40:30"
+        "pos" : "250:350",
+        "dmn" : "250:100",
+        "tclr" : "black"
     }
 }

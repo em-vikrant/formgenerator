@@ -11,26 +11,70 @@
 #include <FormGenerator/FormGenerator.hpp>
 
 
-fg::FormGenerator::FormGenerator()
+fg::FormGenerator::FormGenerator(std::string sAppPath)
+    : formTitle("Untitled"), isLive(false), configFlag(false)
 {
-    this->formTitle = sf::String("Untitled");
-    isLive = false;
+    sAppName = sAppPath;
+    sAppName = sAppName.substr(sAppName.find_last_of("/") + 1);
 
     /* Configure the project. */
     pConfig = std::make_shared<fg::utils::Config>();
-    pConfig->ConfigureCurrentApp();
+    
+    /* On successful configuration of application. */
+    if (pConfig->ConfigureApp(sAppName))
+    {
+        /* Get the form dimensions. */
+        std::string sFormDimension = pConfig->GetValueFromKey("fdm");
+        width = std::stoi(sFormDimension.substr(0, sFormDimension.find(":")));
+        height = std::stoi(sFormDimension.substr(sFormDimension.find(":") + 1));
+
+        /* Get the font & font size. */
+        std::string font = pConfig->GetValueFromKey("fnt");
+        uint16_t fontSize = std::stoi(pConfig->GetValueFromKey("fsz"));
+
+        /* Set gloabl font parameters for widgets. */
+        oWidgetManager.SetGlobalFontParms(font, fontSize);
+
+        /* Fetch all widget keys from config. */
+        widgetKeys = pConfig->GetSubJsonKeys();
+
+        /* Add widgets to widget manager for each config key. */
+        for (std::string key : widgetKeys)
+        {
+            oWidgetManager.AddWidget(key, pConfig->GetValuesFromKey(key));
+        }
+
+        configFlag = true;
+    }
 }
 
 fg::FormGenerator::~FormGenerator()
 {
 }
 
-void fg::FormGenerator::Create(std::string title, fg::FormDimensions dimensions)
+// TODO: better design thinking for below function.
+void fg::FormGenerator::SetWidgetInitText(const std::string sWidgetKey, const std::string sText)
 {
-    // TODO: Fetch dimensions from the config
-    this->formTitle = sf::String(title);
-    formWindow.create(sf::VideoMode(dimensions.width, dimensions.height), formTitle); 
-    isLive = true;
+    if (std::find(widgetKeys.begin(), widgetKeys.end(), sWidgetKey) != widgetKeys.end())
+        oWidgetManager[sWidgetKey]->SetWidgetInitText(sText);
+}
+
+bool fg::FormGenerator::Create(std::string title)
+{
+    bool ret = false;
+
+    /* Create form if application is configured successfully. */
+    if (configFlag)
+    {
+        formTitle = sf::String(title);
+        formWindow.create(sf::VideoMode(width, height), formTitle);
+
+        /* Set form live. */
+        isLive = true;
+        ret = true;
+    }
+
+    return ret;
 }
 
 void fg::FormGenerator::Display()
@@ -39,11 +83,12 @@ void fg::FormGenerator::Display()
     formWindow.clear(sf::Color::White);
 
     /* Draw widgets on form. */
-    for (auto widget : widgetVector)
+    for (std::string key : widgetKeys)
     {
-        if (widget->IsLive())
+        fg::Widget& widget = *(oWidgetManager[key]);
+        if (widget.IsLive())
         {
-            widget->Draw(formWindow);
+            widget.Draw(formWindow);
         }
     }
 
@@ -73,16 +118,18 @@ void fg::FormGenerator::Update()
                 case sf::Event::MouseButtonReleased:
                 case sf::Event::TextEntered:
                     {
-                        for (auto widget : widgetVector)
+                        for (auto key : widgetKeys)
                         {
+                            fg::Widget& widget = *(oWidgetManager[key]);
+                            
                             /* 1. Let the widget handle events at their own will. */
-                            widget->SetCurrentEvent(event);
+                            widget.SetCurrentEvent(event);
 
                             /* 2. Set the mouse state. */
-                            widget->SetMouseState(widget->IsMouseOver(formWindow));
+                            widget.SetMouseState(widget.IsMouseOver(formWindow));
 
                             /* Let the widget act accordingly. */
-                            widget->TakeAction();
+                            widget.TakeAction();
                         }
                     }
                     break;
@@ -94,15 +141,3 @@ void fg::FormGenerator::Update()
     }
 }
 
-void fg::FormGenerator::AddWidget(fg::WidgetType widgetType, std::string title, float xPos, float yPos)
-{
-    // TODO: Addition of widgets from the app config file.
-    if (widgetType == fg::WidgetType::WG_Button)
-    {
-        widgetVector.push_back(std::make_shared<fg::Button>(xPos, yPos, title));
-    }
-    else if (widgetType == fg::WidgetType::WG_TextBox)
-    {
-        widgetVector.push_back(std::make_shared<fg::TextBox>(xPos, yPos, title));
-    }
-}

@@ -16,7 +16,7 @@ fg::utils::Config::Config()
     std::string rootCfgFile = std::string(ROOT_PATH) + "/" + CONFIG_FILE;
     fg::utils::Json rootNode;
     
-    isConfigPresent = false;
+    /* Read root configuration. */
     fg::utils::Json::Read(rootNode, rootCfgFile);
     // rootNode.Display();
 
@@ -38,14 +38,17 @@ fg::utils::Config::Config()
                         std::string sAppPath = appDir + "/" +
                                 rootNode["app"][appId]["title"].GetString() + "/" +
                                 CONFIG_FILE;
+                        std::string appName = "";
+                        bool isConfigPresent = false;
+
                         std::ifstream f(sAppPath);
                         if (f.good())
                         {
-                            appTitle = rootNode["app"][appId]["title"].GetString();
-                            appConfig = sAppPath;
+                            appName.assign(rootNode["app"][appId]["title"].GetString());
                             isConfigPresent = true;
-                            break;
                         }
+
+                        appsVec.push_back({appName, isConfigPresent});
                     }
                 }
             }
@@ -53,16 +56,31 @@ fg::utils::Config::Config()
     }
 }
 
-bool fg::utils::Config::ConfigureCurrentApp()
+bool fg::utils::Config::ConfigureApp(const std::string& sAppName)
 {
-    if (!isConfigPresent)
-        return false;
-    
-    std::cout << "CONFIG, Configuring app = " << appTitle << std::endl;
-    appNode = std::make_shared<fg::utils::Json>();
-    fg::utils::Json::Read(*appNode, appConfig);
-    // appJson.Display();
-    return true;
+    bool ret = false;
+
+    appConfig.clear();
+
+    for (auto appInfoPair : appsVec)
+    {
+        if (appInfoPair.first == sAppName && appInfoPair.second == true)
+        {
+            appConfig.assign(appDir + "/" + appInfoPair.first + "/" + CONFIG_FILE);
+        }
+    }
+
+    /* Read application's configurations. */
+    if (!appConfig.empty())
+    {
+        ret = true;
+
+        appNode = std::make_shared<fg::utils::Json>();
+        fg::utils::Json::Read(*appNode, appConfig);
+        // appJson.Display();
+    }
+
+    return ret;
 }
 
 std::string fg::utils::Config::GetValueFromKey(const std::string& key) const
@@ -76,6 +94,23 @@ std::string fg::utils::Config::GetValueFromKey(const std::string& key) const
     }
 
     return value;
+}
+
+std::vector<std::string> fg::utils::Config::GetSubJsonKeys() const
+{
+    fg::utils::Json node = *appNode;
+    std::vector<std::string> keysVec;
+
+    for (auto property : node.objectsVec)
+    {
+        /* Fill value vector with key values of subjson. */
+        if (property.second.GetType() == fg::utils::Json::Type::OBJECT)
+        {
+            keysVec.emplace_back(property.first);
+        }
+    }
+
+    return keysVec;
 }
 
 std::vector<std::pair<std::string, std::string>> 

@@ -40,11 +40,10 @@ class fg::TextBox : public fg::Widget
     public:
         /* Constructor. */
         TextBox();
-        TextBox(float xPos, float yPos, std::string title);
-        TextBox(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor);
+        TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
 
         /* Functions. */
-        void Create(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor);
+        void Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
         void Draw(sf::RenderWindow& window) override;
         bool IsMouseOver(const sf::RenderWindow& window) override;
         void TakeAction() override;
@@ -60,10 +59,10 @@ class fg::TextBox : public fg::Widget
         std::string inputString;
         std::string cursorChar;
         bool isLive;
-        fg::Pair2f margin;
-        fg::Pair2f limit;
+        sf::Vector2f margin;
+        sf::Vector2f limit;
         
-        void SetTextParms(sf::Text& text, std::string& input, fg::Pair2f coordinate);
+        void SetTextParms(sf::Text& text, std::string& input, sf::Vector2f coordinate);
         void AddEntryToTextVec(std::string input);
         void SetTextVecAtEnd(std::string input);
         bool IsTextInLimits(const sf::Text& text);

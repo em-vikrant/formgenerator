@@ -3,12 +3,10 @@
     "app" : {
         "dir" : "examples",
         "app1" : {
-            "title" : "test_app",
-            "enable" : "true"
+            "title" : "test_app"
         },
         "app2" : {
-            "title" : "basic_app",
-            "enable" : "false"
+            "title" : "basic_app"
         }
     }
 }
