@@ -29,7 +29,6 @@ class fg::Button : public fg::Widget
         Button() : Widget() { isLive = false; }
         Button(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
 
-
         /* Functions. */
         void Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
         void Draw(sf::RenderWindow& window) override;

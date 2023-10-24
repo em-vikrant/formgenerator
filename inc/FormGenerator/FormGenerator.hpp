@@ -24,7 +24,6 @@ namespace fg
     class FormGenerator;
 }
 
-
 /* Brief: FormGenerator class. */
 class fg::FormGenerator
 {
@@ -52,6 +51,7 @@ class fg::FormGenerator
         sf::String          formTitle;      /*! Form title. */
         sf::Color           color;          /*! Form title. */
         sf::Event           event;          /*! Pointer to the sfml event occured. */
+  
         std::string         sAppName;       /*! Current application name. */
         bool                isLive;         /*! To check if form window is open. */
         

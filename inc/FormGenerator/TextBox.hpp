@@ -59,6 +59,7 @@ class fg::TextBox : public fg::Widget
         std::string inputString;
         std::string cursorChar;
         bool isLive;
+
         sf::Vector2f margin;
         sf::Vector2f limit;
         

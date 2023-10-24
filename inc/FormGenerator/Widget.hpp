@@ -98,6 +98,7 @@ class fg::Widget
         void SetWidgetCoordinates(sf::Vector2f coordinates) { this->coordinates = coordinates; }
 
         uint16_t GetDefaultFontSize() { return globalFontSize; }
+  
         sf::Font& GetDefaultFont();
         sf::Event& GetCurrentEvent() { return event; }
 
