@@ -2,21 +2,27 @@
 #include <iostream>
 #include <FormGenerator/FormGenerator.hpp>
 
-int main()
+
+int main(int argc, char *argv[])
 {
-    fg::FormGenerator form;
-    std::cout << "Hello World!" << std::endl;
-    form.Create("My Form", static_cast<fg::FormDimensions>(fg::FormDimensions{800, 600}));
+    fg::FormGenerator form(argv[0]);
+    std::cout << "Hello World! It's a basic application!" << std::endl;
 
-    form.AddWidget(fg::WidgetType::WG_Button, "My Button", 300.0f, 500.0f);
-    form.AddWidget(fg::WidgetType::WG_TextBox, "My TextBox", 250.0f, 400.0f);
-
-    while (form.IsLive() == true)
+    if (form.Create("BASIC APPLICATION FORM"))
     {
-        form.Update();
-        form.Display();
-    }
+        form.SetWidgetInitText("B1", "MYB1");
+        form.SetWidgetInitText("T1", "Write here!");
 
-    form.Close();
+        while (form.IsLive() == true)
+        {
+            form.Update();
+            form.Display();
+        }
+
+        form.Close();
+    }
+    else
+        std::cerr << "Failed to create form!\n";
+
     return 0;
 }

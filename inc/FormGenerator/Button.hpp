@@ -27,11 +27,10 @@ class fg::Button : public fg::Widget
     public:
         /* Constructor. */
         Button() : Widget() { isLive = false; }
-        Button(float xPos, float yPos, std::string title);
-        Button(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor);
+        Button(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
 
         /* Functions. */
-        void Create(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor);
+        void Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
         void Draw(sf::RenderWindow& window) override;
         bool IsMouseOver(const sf::RenderWindow& window) override;
         void TakeAction() override;

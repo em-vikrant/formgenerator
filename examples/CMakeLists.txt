@@ -1,7 +1,7 @@
 project(FormGenerator)
 
 # List of applicatoins to build (in examples directory).
-set(EX_APPS basic_app test_app)
+set(EX_APPS test_app basic_app)
 
 # Subdirectory addition to the build pack.
 foreach(X IN LISTS EX_APPS)

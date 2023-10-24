@@ -15,55 +15,53 @@
 #include <SFML/Graphics.hpp>
 
 /* FG includes. */
-#include <FormGenerator/Widget.hpp>
+#include <FormGenerator/WidgetManager.hpp>
+#include <FormGenerator/Utils/Config.hpp>
+
 
 namespace fg
 {
     class FormGenerator;
-    struct FormDimensions;
 }
-
-/* Brief: Form Dimensions. */
-struct fg::FormDimensions
-{
-    uint16_t width;
-    uint16_t height;
-};
 
 /* Brief: FormGenerator class. */
 class fg::FormGenerator
 {
     public:
         /* Constructors. */
-        FormGenerator();
+        FormGenerator(std::string sAppPath);
 
         /* Destructors. */
         ~FormGenerator();
 
         /* Formgenerator driver functions. */
-        void Create(std::string title, fg::FormDimensions dimensions);
+        bool Create(std::string title);
         void Update();
         void Display();
         void Close();
 
-        /* Getters. */
-        sf::Event GetCurrentEvent() { return event; }
-
-        /* Widget generator function. */
-        void AddWidget(fg::WidgetType widgetType, std::string title, float xPos, float yPos);
-
         inline bool IsLive() { return isLive; }
         inline void UnLive() { isLive = false; }
 
+        /* Client level widget manipulation. */
+        void SetWidgetInitText(const std::string widgetKey, const std::string sText);
+
     private:
-        bool                isLive;         /*! To check if form window is open. */
         sf::RenderWindow    formWindow;     /*! Window instance to hold the form. */
         sf::String          formTitle;      /*! Form title. */
         sf::Color           color;          /*! Form title. */
         sf::Event           event;          /*! Pointer to the sfml event occured. */
+  
+        std::string         sAppName;       /*! Current application name. */
+        bool                isLive;         /*! To check if form window is open. */
+        
+        bool                configFlag;     /*! Config flag, set to true on successful configuration read. */
+        uint16_t            width;          /*! Form width. */
+        uint16_t            height;         /*! Form height. */
 
-        /* WIDGETS */
-        std::vector<std::shared_ptr<fg::Widget>> widgetVector;
+        std::shared_ptr<fg::utils::Config> pConfig;
+        fg::WidgetManager   oWidgetManager;
+        std::vector<std::string> widgetKeys;
 };
 
 #endif // FORM_GENERATOR_H

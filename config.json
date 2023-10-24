@@ -1,0 +1,12 @@
+{
+    "library" : "formgenerator",
+    "app" : {
+        "dir" : "examples",
+        "app1" : {
+            "title" : "test_app"
+        },
+        "app2" : {
+            "title" : "basic_app"
+        }
+    }
+}

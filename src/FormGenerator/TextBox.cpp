@@ -11,6 +11,7 @@
 
 
 fg::TextBox::TextBox()
+    : Widget()
 {
     isLive = false;
     cursorChar = std::string(1, fg::CURSOR_CHAR);
@@ -19,40 +20,61 @@ fg::TextBox::TextBox()
     limit = {0, 0};
 }
 
-fg::TextBox::TextBox(float xPos, float yPos, std::string title) :
+fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor) :
     fg::TextBox()
-{
-    Create(xPos, yPos, defaultTextBoxWidth, defaultTextBoxHeight, title, fg::Color{255, 255, 255, 255}, fg::Color{0, 0, 0, 180});
-}
-
-fg::TextBox::TextBox(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor) :
-    fg::TextBox()
-{
-    Create(xPos, yPos, width, height, title, bgColor, titleColor);
-}
-
-void fg ::TextBox::Create(float xPos, float yPos, float width, float height, std::string title, fg::Color bgColor, fg::Color titleColor)
 {
     try
     {
         /* Widget shape characterstics. */
-        shape.setPosition(xPos, yPos);
-        shape.setSize(sf::Vector2f(width, height));
+        shape.setPosition(position);
+        shape.setSize(dimension);
         shape.setOutlineColor(sf::Color::Black);
         shape.setOutlineThickness(1);
-
-        color = sf::Color{bgColor.r, bgColor.g, bgColor.b, bgColor.a};
-        shape.setFillColor(color);
-
-        /* Widget title characterstics. */
-        SetWidgetTitle(title, titleColor);
+        shape.setFillColor(bgColor);
+        
+        SetWidgetColor(bgColor);
+        SetWidgetText("TextBox", textColor);
 
         sf::FloatRect titleBounds = GetWidgetTitleBounds();
         SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
-        SetWidgetTitlePosition(xPos + width / 2.0f, yPos + height / 2.0f);
+        SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
 
         /* Inline text characterstics. */
-        SetWidgetCoordinates(fg::Pair2f{xPos, yPos});
+        SetWidgetCoordinates(position);
+        AddEntryToTextVec(inputString);
+
+        /* Make the button live. */
+        isLive = true;
+    }
+    catch(std::exception& e)
+    {
+        std::ostringstream oss;
+        oss << "CAUGHT AT [" << __func__ << ":" << __LINE__ << "]\n";
+        oss << "\tINFO " << e.what();
+        std::cout << oss.str() << std::endl;
+    }
+}
+
+void fg ::TextBox::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor)
+{
+    try
+    {
+        /* Widget shape characterstics. */
+        shape.setPosition(position);
+        shape.setSize(dimension);
+        shape.setOutlineColor(sf::Color::Black);
+        shape.setOutlineThickness(1);
+        shape.setFillColor(bgColor);
+        
+        SetWidgetColor(bgColor);
+        SetWidgetText("TextBox", textColor);
+
+        sf::FloatRect titleBounds = GetWidgetTitleBounds();
+        SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
+        SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
+
+        /* Inline text characterstics. */
+        SetWidgetCoordinates(position);
         AddEntryToTextVec(inputString);
 
         /* Make the button live. */
@@ -75,7 +97,7 @@ void fg::TextBox::Draw(sf::RenderWindow& window)
     /* Display widget title. */
     if (IsWidgetTitleEnabled() == true)
     {
-        window.draw(GetWidgetTitle());
+        window.draw(GetWidgetText());
     }
     else
     {
@@ -156,11 +178,11 @@ void fg::TextBox::TakeAction()
     }
 }
 
-void fg::TextBox::SetTextParms(sf::Text& text, std::string& input, fg::Pair2f coordinates)
+void fg::TextBox::SetTextParms(sf::Text& text, std::string& input, sf::Vector2f coordinates)
 {
     text.setFont(GetDefaultFont());
-    text.setCharacterSize(defaultFontSize);
-    text.setFillColor(sf::Color::Black);
+    text.setCharacterSize(GetDefaultFontSize());
+    text.setFillColor(GetWidgetTextColor());
     text.setString(input);
 
     sf::FloatRect inlineTextBounds = text.getLocalBounds();
@@ -171,17 +193,17 @@ void fg::TextBox::SetTextParms(sf::Text& text, std::string& input, fg::Pair2f co
 void fg::TextBox::AddEntryToTextVec(std::string input)
 {
     sf::Text newLineText;
-    fg::Pair2f& coord = GetWidgetCoordinates();
+    sf::Vector2f& coord = GetWidgetCoordinates();
 
     if (textVec.empty())
     {
-        SetTextParms(newLineText, input, fg::Pair2f{coord.x + margin.x, coord.y + margin.y});
+        SetTextParms(newLineText, input, coord + margin);
     }
     else
     {
-        fg::Pair2f textCoords{
+        sf::Vector2f textCoords{
             coord.x + margin.x,
-            coord.y + (defaultFontSize + 1.0f) * textVec.size() + margin.y
+            coord.y + (GetDefaultFontSize() + 1.0f) * textVec.size() + margin.y
         };
         SetTextParms(newLineText, input, textCoords);
     }
@@ -199,7 +221,7 @@ bool fg::TextBox::IsTextInLimits(const sf::Text& text)
     sf::FloatRect textBounds = text.getGlobalBounds();
 
     if (textBounds.width < (shape.getSize().x - margin.x * 1.5) &&
-       (defaultFontSize + textBounds.top) < ((GetWidgetCoordinates().y + shape.getSize().y) - margin.y * 0.5))
+       (GetDefaultFontSize() + textBounds.top) < ((GetWidgetCoordinates().y + shape.getSize().y) - margin.y * 0.5))
         inLimits = true;
 
 //    printf("X: [%0.2f < %0.2f], Y: [%0.2f < %0.2f] == %s\n", textBounds.width, (shape.getSize().x - margin.x * 1.5), (defaultFontSize + textBounds.top), ((GetWidgetCoordinates().y + shape.getSize().y) - margin.y * 0.5), inLimits ? "true" : "false");
