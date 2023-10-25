@@ -1,6 +1,7 @@
 # FORM GENERATOR
 
-A C++ Library to create forms that uses SFML.
+A C++ Library to create forms that uses SFML.  
+It's an experimental project using which an interactive UI for the forms can be made quickly and easily.
 
 ## DEVELOPMENT STATE
 
@@ -8,12 +9,12 @@ A C++ Library to create forms that uses SFML.
 &emsp;```main```  
 &emsp;```dev```  
 * **main** branch is stable. It can be used without any problem.
-* All future changes first come in **dev** branch and later on it will get added to **main**
+* All future changes first come in **dev** branch and later on they will get added to **main** branch.
 
 ## REQUIREMENTS
 
 Must have these:  
-```cmake, make, SFML```
+```cmake```&ensp;```make```&ensp;```SFML```
 
 * Necessary directory architecture buildup:  
   
@@ -32,11 +33,11 @@ Must have these:
 
 * Goto dir **formgenerator**  
 ```cd formgenerator```
-* Open CMakeLists.txt and modify accordingly to generate a debug or release build.
-* Generator cmake build bundle
-    * On Windows : MinGW compiler  
+* Open CMakeLists.txt and modify if necessary, to generate a debug or release build.
+* Generate build package using cmake:
+    * On Windows (from CMD) : MinGW compiler  
     ```cmake -G "MinGW Makefiles" -S . -B ./build```
-    * On Mac / Linux  
+    * On Mac / Linux (from Terminal)  
     ```cmake -S . -B ./build```
 
 ### Build package compilation
@@ -46,5 +47,5 @@ Must have these:
 
 ## RUN
 
-* Locate the application:- check example directory in build created after compilation.
+* Locate the application:- check examples directory in build created after the compilation.
 
