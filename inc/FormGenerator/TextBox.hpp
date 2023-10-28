@@ -52,10 +52,8 @@ class fg::TextBox : public fg::Widget
         inline void UnLive() override { isLive = false; }
 
     private:
-        sf::RectangleShape shape;
         sf::Text inlineText;
         std::vector<sf::Text> textVec;
-        sf::Color color;
         std::string inputString;
         std::string cursorChar;
         bool isLive;

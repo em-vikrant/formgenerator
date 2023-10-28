@@ -25,6 +25,9 @@ fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bg
 {
     try
     {
+        pShape = std::make_shared<sf::RectangleShape>();
+        sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
         /* Widget shape characterstics. */
         shape.setPosition(position);
         shape.setSize(dimension);
@@ -59,6 +62,8 @@ void fg ::TextBox::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Col
 {
     try
     {
+        sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+        
         /* Widget shape characterstics. */
         shape.setPosition(position);
         shape.setSize(dimension);
@@ -91,6 +96,8 @@ void fg ::TextBox::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Col
 
 void fg::TextBox::Draw(sf::RenderWindow& window)
 {
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
     /* Display widget. */
     window.draw(shape);
     
@@ -108,6 +115,8 @@ void fg::TextBox::Draw(sf::RenderWindow& window)
 
 bool fg::TextBox::IsMouseOver(const sf::RenderWindow& window)
 {
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2f buttonPos = shape.getPosition();
     sf::Vector2f buttonSize = shape.getSize();
@@ -217,6 +226,7 @@ void fg::TextBox::AddEntryToTextVec(std::string input)
 bool fg::TextBox::IsTextInLimits(const sf::Text& text)
 {
     bool inLimits = false;
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
 
     sf::FloatRect textBounds = text.getGlobalBounds();
 

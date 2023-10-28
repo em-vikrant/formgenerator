@@ -39,8 +39,6 @@ class fg::Button : public fg::Widget
         inline void UnLive() override { isLive = false; }
 
     private:
-        sf::RectangleShape shape;
-        sf::Color color;
         bool isLive;
 };
 

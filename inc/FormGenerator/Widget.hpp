@@ -9,6 +9,7 @@
 #include <string>
 #include <sstream>
 #include <exception>
+#include <memory>
 
 /* SFML includes. */
 #include <SFML/Window.hpp>
@@ -21,16 +22,8 @@
 namespace fg
 {
     class Widget;
-    struct Pair2f;
     struct Color;
 }
-
-/* Brief: Vector/Pair structure. */
-struct fg::Pair2f
-{
-    float x;
-    float y;
-};
 
 
 /* Brief: Widget class. */
@@ -38,7 +31,7 @@ class fg::Widget
 {
     public:
         /* Enum class: Widget parameters. */
-        enum class Param { NONE, TYPE, POSITION, DIMENSION, COLOR, COLORHEX, TEXT_COLOR };
+        enum class Param { NONE, TYPE, POSITION, DIMENSION, COLOR, TEXT_COLOR };
         
         /* Enum class: Widget type. */
         enum class Type { NONE, BUTTON, TEXTBOX };
@@ -101,6 +94,10 @@ class fg::Widget
   
         sf::Font& GetDefaultFont();
         sf::Event& GetCurrentEvent() { return event; }
+
+
+        /* Protected data member. */
+        std::shared_ptr<sf::Shape>       pShape;    /*! Shape pointer. */
 
     private:
         std::string     sWidgetText;            /*! Text displayed on the widget. */

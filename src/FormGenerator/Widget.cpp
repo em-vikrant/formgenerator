@@ -115,10 +115,6 @@ std::string fg::Widget::GetWidgetParamStr(fg::Widget::Param param)
             sParam.assign("clr");
             break;
 
-        case Param::COLORHEX:
-            sParam.assign("clh");
-            break;
-
         case Param::TEXT_COLOR:
             sParam.assign("tclr");
             break;
@@ -143,8 +139,6 @@ fg::Widget::Param fg::Widget::GetWidgetParam(const std::string& sParam)
         param = Param::DIMENSION;
     else if (sParam == "clr")
         param = Param::COLOR;
-    else if (sParam == "clh")
-        param = Param::COLORHEX;
     else if (sParam == "tclr")
         param = Param::TEXT_COLOR;
     else
@@ -189,7 +183,6 @@ sf::Color fg::Widget::GetSFMLColor(const std::string& sColor)
         _sColor = _sColor.substr(_sColor.find(":") + 1);
 
         sfColor.a = std::stoi(_sColor);
-        printf("SFML COLOR, %d, %d, %d, %d\n", sfColor.r, sfColor.g, sfColor.b, sfColor.a);
     }
     else
     {

@@ -15,6 +15,10 @@ fg::Button::Button(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgCo
 {
     try
     {
+        /* Create shape for this class. */
+        pShape = std::make_shared<sf::RectangleShape>();
+        sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
         shape.setPosition(position);
         shape.setSize(dimension);
         shape.setFillColor(bgColor);
@@ -42,6 +46,8 @@ void fg::Button::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color
 {
     try
     {
+        sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
         shape.setPosition(position);
         shape.setSize(dimension);
         shape.setFillColor(bgColor);
@@ -68,6 +74,7 @@ void fg::Button::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color
 void fg::Button::Draw(sf::RenderWindow& window)
 {
     /* Display widget. */
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
     window.draw(shape);
     
     /* Display widget title. */
@@ -79,6 +86,8 @@ void fg::Button::Draw(sf::RenderWindow& window)
 
 bool fg::Button::IsMouseOver(const sf::RenderWindow& window)
 {
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2f buttonPos = shape.getPosition();
     sf::Vector2f buttonSize = shape.getSize();
@@ -89,6 +98,8 @@ bool fg::Button::IsMouseOver(const sf::RenderWindow& window)
 
 void fg::Button::TakeAction()
 {
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
     /* Get the event and take action accordingly. */
     if (IsMouseClicked())
         shape.setFillColor(sf::Color::Red);

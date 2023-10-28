@@ -34,7 +34,6 @@ void fg::WidgetManager::AddWidget(std::string name,
                 break;
 
             case fg::Widget::Param::COLOR:
-            case fg::Widget::Param::COLORHEX:
                 widgetColor = fg::Widget::GetSFMLColor(cPair.second);
                 break;
             
