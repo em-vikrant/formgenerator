@@ -3,18 +3,56 @@
     "fdm" : "800:600",
     "fnt" : "calibri",
     "fsz" : "15",
+    "H0" : {
+        "typ" : "title",
+        "clr" : "white",
+        "pos" : "250:50",
+        "dmn" : "300:80"
+    },
+    "H1" : {
+        "typ" : "title",
+        "clr" : "white",
+        "pos" : "100:185",
+        "dmn" : "90:20"
+    },
+    "T1" : {
+        "typ" : "textbox",
+        "clr" : "white",
+        "pos" : "200:180",
+        "dmn" : "200:40",
+        "tclr" : "102:51:0:255"
+    },
+    "H2" : {
+        "typ" : "title",
+        "clr" : "white",
+        "pos" : "100:235",
+        "dmn" : "90:20"
+    },
+    "T2" : {
+        "typ" : "textbox",
+        "clr" : "white",
+        "pos" : "200:230",
+        "dmn" : "200:40",
+        "tclr" : "102:51:0:255"
+    },
+    "H3" : {
+        "typ" : "title",
+        "clr" : "white",
+        "pos" : "100:285",
+        "dmn" : "90:20"
+    },
+    "T3" : {
+        "typ" : "textbox",
+        "clr" : "white",
+        "pos" : "200:280",
+        "dmn" : "200:60",
+        "tclr" : "102:51:0:255"
+    },
     "B1" : {
         "typ" : "button",
         "clr" : "0:210:210:255",
         "pos" : "300:500",
         "dmn" : "80:30",
         "tclr" : "black"
-    },
-    "T1" : {
-        "typ" : "textbox",
-        "clr" : "white",
-        "pos" : "250:350",
-        "dmn" : "250:100",
-        "tclr" : "102:51:0:255"
     }
 }

@@ -12,6 +12,8 @@ set(SRC
     ${SRCROOT}/Button.cpp
     ${INCROOT}/FormGenerator/TextBox.hpp
     ${SRCROOT}/TextBox.cpp
+    ${INCROOT}/FormGenerator/Title.hpp
+    ${SRCROOT}/Title.cpp
     ${INCROOT}/FormGenerator/WidgetManager.hpp
     ${SRCROOT}/WidgetManager.cpp
     ${INCROOT}/FormGenerator/FormGenerator.hpp

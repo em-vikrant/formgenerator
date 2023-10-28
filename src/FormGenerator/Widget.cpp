@@ -29,6 +29,14 @@ fg::Widget::Widget()
     }
 }
 
+fg::Widget::Widget(sf::Vector2f _position, sf::Vector2f _dimension)
+    : Widget()
+{
+    /* Set the position and dimension vector. */
+    position = _position;
+    dimension = _dimension;
+}
+
 void fg::Widget::SetWidgetText(std::string sText, sf::Color textColor)
 {
     try
@@ -40,6 +48,9 @@ void fg::Widget::SetWidgetText(std::string sText, sf::Color textColor)
             widgetText.setCharacterSize(globalFontSize);
             widgetText.setFillColor(textColor);
             widgetTextColor = textColor;
+
+            /* Positioning of text at widget's center. */
+            PositionWidgetTextAtCenter();
 
             EnableWidgetTitle();
         }
@@ -71,11 +82,22 @@ void fg::Widget::SetWidgetInitText(const std::string& sText)
 {
     sWidgetText = sText;
     widgetText.setString(sWidgetText);
+
+    /* Positioning of text at widget's center. */
+    PositionWidgetTextAtCenter();
 }
 
 void fg::Widget::SetWidgetTextFontSize(int size)
 {
     widgetTextFontSize = size;
+    widgetText.setCharacterSize(widgetTextFontSize);
+}
+
+void fg::Widget::PositionWidgetTextAtCenter()
+{
+    sf::FloatRect titleBounds = GetWidgetTitleBounds();
+    SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
+    SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
 }
 
 sf::Font& fg::Widget::GetDefaultFont()
@@ -161,6 +183,8 @@ fg::Widget::Type fg::Widget::GetWidgetType(const std::string& sType)
         type = Widget::Type::BUTTON;
     else if (_sType == "textbox")
         type = Widget::Type::TEXTBOX;
+    else if (_sType == "title")
+        type = Widget::Type::TITLE;
 
     return type;
 }

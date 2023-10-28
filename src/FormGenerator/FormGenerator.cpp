@@ -35,13 +35,11 @@ fg::FormGenerator::FormGenerator(std::string sAppPath)
         /* Set gloabl font parameters for widgets. */
         oWidgetManager.SetGlobalFontParms(font, fontSize);
 
-        /* Fetch all widget keys from config. */
-        widgetKeys = pConfig->GetSubJsonKeys();
-
         /* Add widgets to widget manager for each config key. */
-        for (std::string key : widgetKeys)
+        for (std::string key : pConfig->GetSubJsonKeys())
         {
-            oWidgetManager.AddWidget(key, pConfig->GetValuesFromKey(key));
+            bool ret = oWidgetManager.AddWidget(key, pConfig->GetValuesFromKey(key));
+            widgetKeys.push_back({key, ret});
         }
 
         configFlag = true;
@@ -55,8 +53,14 @@ fg::FormGenerator::~FormGenerator()
 // TODO: better design thinking for below function.
 void fg::FormGenerator::SetWidgetInitText(const std::string sWidgetKey, const std::string sText)
 {
-    if (std::find(widgetKeys.begin(), widgetKeys.end(), sWidgetKey) != widgetKeys.end())
-        oWidgetManager[sWidgetKey]->SetWidgetInitText(sText);
+    for(auto itr = widgetKeys.begin(); itr != widgetKeys.end(); itr++)
+    {
+        if (itr->first == sWidgetKey && itr->second)
+        {
+            oWidgetManager[sWidgetKey]->SetWidgetInitText(sText);
+            break;
+        }
+    }
 }
 
 bool fg::FormGenerator::Create(std::string title)
@@ -83,12 +87,15 @@ void fg::FormGenerator::Display()
     formWindow.clear(sf::Color::White);
 
     /* Draw widgets on form. */
-    for (std::string key : widgetKeys)
+    for (auto key : widgetKeys)
     {
-        fg::Widget& widget = *(oWidgetManager[key]);
-        if (widget.IsLive())
+        if (key.second)
         {
-            widget.Draw(formWindow);
+            fg::Widget& widget = *(oWidgetManager[key.first]);
+            if (widget.IsLive())
+            {
+                widget.Draw(formWindow);
+            }
         }
     }
 
@@ -120,16 +127,19 @@ void fg::FormGenerator::Update()
                     {
                         for (auto key : widgetKeys)
                         {
-                            fg::Widget& widget = *(oWidgetManager[key]);
+                            if (key.second)
+                            {
+                                fg::Widget& widget = *(oWidgetManager[key.first]);
                             
-                            /* 1. Let the widget handle events at their own will. */
-                            widget.SetCurrentEvent(event);
+                                /* 1. Let the widget handle events at their own will. */
+                                widget.SetCurrentEvent(event);
 
-                            /* 2. Set the mouse state. */
-                            widget.SetMouseState(widget.IsMouseOver(formWindow));
+                                /* 2. Set the mouse state. */
+                                widget.SetMouseState(widget.IsMouseOver(formWindow));
 
-                            /* Let the widget act accordingly. */
-                            widget.TakeAction();
+                                /* Let the widget act accordingly. */
+                                widget.TakeAction();
+                            }
                         }
                     }
                     break;

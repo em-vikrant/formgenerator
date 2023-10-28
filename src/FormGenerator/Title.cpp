@@ -1,5 +1,5 @@
-/* FILE: Button.cpp
- * Button class implementation.
+/* FILE: Title.cpp
+ * Title class implementation.
  */
 
 /* STD includes. */
@@ -7,10 +7,10 @@
 #include <string>
 
 /* FG includes. */
-#include <FormGenerator/Button.hpp>
+#include <FormGenerator/Title.hpp>
 
 
-fg::Button::Button(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor)
+fg::Title::Title(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor)
     : Widget(position, dimension)
 {
     try
@@ -24,9 +24,10 @@ fg::Button::Button(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgCo
         shape.setFillColor(bgColor);
         
         SetWidgetColor(bgColor);
-        SetWidgetText("Button", textColor);
+        SetWidgetText("Title", textColor);
+        SetWidgetTextFontSize(dimension.y);
 
-        /* Make the button live. */
+        /* Make the title live. */
         isLive = true;
     }
     catch(std::exception& e)
@@ -38,7 +39,7 @@ fg::Button::Button(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgCo
     }
 }
 
-void fg::Button::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor)
+void fg::Title::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor)
 {
     try
     {
@@ -49,13 +50,14 @@ void fg::Button::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color
         shape.setFillColor(bgColor);
 
         SetWidgetColor(bgColor);
-        SetWidgetText("Button", textColor);
+        SetWidgetText("Title", textColor);
+        SetWidgetTextFontSize(dimension.y);
 
         sf::FloatRect titleBounds = GetWidgetTitleBounds();
         SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
         SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
 
-        /* Make the button live. */
+        /* Make the title live. */
         isLive = true;
     }
     catch(std::exception& e)
@@ -67,7 +69,7 @@ void fg::Button::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color
     }
 }
 
-void fg::Button::Draw(sf::RenderWindow& window)
+void fg::Title::Draw(sf::RenderWindow& window)
 {
     /* Display widget. */
     sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
@@ -80,29 +82,21 @@ void fg::Button::Draw(sf::RenderWindow& window)
     }
 }
 
-bool fg::Button::IsMouseOver(const sf::RenderWindow& window)
+bool fg::Title::IsMouseOver(const sf::RenderWindow& window)
 {
     sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
 
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-    sf::Vector2f buttonPos = shape.getPosition();
-    sf::Vector2f buttonSize = shape.getSize();
+    sf::Vector2f titlePos = shape.getPosition();
+    sf::Vector2f titleSize = shape.getSize();
 
-    return mousePos.x >= buttonPos.x && mousePos.x < buttonPos.x + buttonSize.x &&
-        mousePos.y >= buttonPos.y && mousePos.y < buttonPos.y + buttonSize.y;
+    return mousePos.x >= titlePos.x && mousePos.x < titlePos.x + titleSize.x &&
+        mousePos.y >= titlePos.y && mousePos.y < titlePos.y + titleSize.y;
 }
 
-void fg::Button::TakeAction()
+void fg::Title::TakeAction()
 {
-    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
-
-    /* Get the event and take action accordingly. */
-    if (IsMouseClicked())
-        shape.setFillColor(sf::Color::Red);
-    else if (IsMouseReleased())
-        shape.setFillColor(GetWidgetColor());
-    else if (IsMouseHover())
-        shape.setFillColor(sf::Color::Green);
+    /* No action. It's an inactive widget. */
 }
 
 

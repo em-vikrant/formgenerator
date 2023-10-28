@@ -34,10 +34,11 @@ class fg::Widget
         enum class Param { NONE, TYPE, POSITION, DIMENSION, COLOR, TEXT_COLOR };
         
         /* Enum class: Widget type. */
-        enum class Type { NONE, BUTTON, TEXTBOX };
+        enum class Type { NONE, BUTTON, TEXTBOX, TITLE };
 
         /* Constructor. */
         Widget();
+        Widget(sf::Vector2f _position, sf::Vector2f _dimension);
 
         /* Destructor. */
         virtual ~Widget() {}
@@ -68,7 +69,7 @@ class fg::Widget
         sf::Text        GetWidgetText()         { return widgetText; }
         sf::Color       GetWidgetColor()        { return widgetColor; }
         sf::Color       GetWidgetTextColor()    { return widgetTextColor; }
-        sf::Vector2f&   GetWidgetCoordinates()  { return coordinates; }
+        sf::Vector2f&   GetWidgetPosition()     { return position; }
 
         /* Static functions. */
         static std::string  GetWidgetParamStr(Param param);
@@ -86,15 +87,15 @@ class fg::Widget
         void SetWidgetTitleOrigin(float xPos, float yPos);
         void SetWidgetTitlePosition(float xPos, float yPos);
         void SetWidgetTextFontSize(int size);
-        void SetWidgetColor(sf::Color color)    { widgetColor = color; }
-
-        void SetWidgetCoordinates(sf::Vector2f coordinates) { this->coordinates = coordinates; }
+        void SetWidgetColor(sf::Color color)            { widgetColor = color; }
+        void SetWidgetPosition(sf::Vector2f pos)        { position = pos; }
+        void SetWidgetDimension(sf::Vector2f dmn)       { dimension = dmn; }
 
         uint16_t GetDefaultFontSize() { return globalFontSize; }
-  
         sf::Font& GetDefaultFont();
         sf::Event& GetCurrentEvent() { return event; }
 
+        void PositionWidgetTextAtCenter();
 
         /* Protected data member. */
         std::shared_ptr<sf::Shape>       pShape;    /*! Shape pointer. */
@@ -116,9 +117,6 @@ class fg::Widget
         /* Global members for all instances. */
         static std::string  globalFontName;
         static uint16_t     globalFontSize;
-
-        /* Widget shape. */
-        sf::Vector2f  coordinates;              /*! Top left coordinates of widget. */
 
         /* Mouse flags. */
         bool        mouseClicked;               /*! Mouse clicked status for a widget. */

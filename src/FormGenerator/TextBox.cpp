@@ -14,17 +14,19 @@ fg::TextBox::TextBox()
     : Widget()
 {
     isLive = false;
-    cursorChar = std::string(1, fg::CURSOR_CHAR);
-    inputString = std::string("");
-    margin = {xMargin, yMargin};
-    limit = {0, 0};
 }
 
-fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor) :
-    fg::TextBox()
+fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor) 
+    : fg::Widget(position, dimension)
 {
     try
     {
+        cursorChar = std::string(1, fg::CURSOR_CHAR);
+        inputString = std::string("");
+        margin = {xMargin, yMargin};
+        limit = {0, 0};
+
+        /* Creating shape for this widget. */
         pShape = std::make_shared<sf::RectangleShape>();
         sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
 
@@ -38,12 +40,7 @@ fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bg
         SetWidgetColor(bgColor);
         SetWidgetText("TextBox", textColor);
 
-        sf::FloatRect titleBounds = GetWidgetTitleBounds();
-        SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
-        SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
-
         /* Inline text characterstics. */
-        SetWidgetCoordinates(position);
         AddEntryToTextVec(inputString);
 
         /* Make the button live. */
@@ -79,7 +76,6 @@ void fg ::TextBox::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Col
         SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
 
         /* Inline text characterstics. */
-        SetWidgetCoordinates(position);
         AddEntryToTextVec(inputString);
 
         /* Make the button live. */
@@ -202,17 +198,17 @@ void fg::TextBox::SetTextParms(sf::Text& text, std::string& input, sf::Vector2f 
 void fg::TextBox::AddEntryToTextVec(std::string input)
 {
     sf::Text newLineText;
-    sf::Vector2f& coord = GetWidgetCoordinates();
+    sf::Vector2f& position = GetWidgetPosition();
 
     if (textVec.empty())
     {
-        SetTextParms(newLineText, input, coord + margin);
+        SetTextParms(newLineText, input, position + margin);
     }
     else
     {
         sf::Vector2f textCoords{
-            coord.x + margin.x,
-            coord.y + (GetDefaultFontSize() + 1.0f) * textVec.size() + margin.y
+            position.x + margin.x,
+            position.y + (GetDefaultFontSize() + 1.0f) * textVec.size() + margin.y
         };
         SetTextParms(newLineText, input, textCoords);
     }
@@ -231,10 +227,10 @@ bool fg::TextBox::IsTextInLimits(const sf::Text& text)
     sf::FloatRect textBounds = text.getGlobalBounds();
 
     if (textBounds.width < (shape.getSize().x - margin.x * 1.5) &&
-       (GetDefaultFontSize() + textBounds.top) < ((GetWidgetCoordinates().y + shape.getSize().y) - margin.y * 0.5))
+       (GetDefaultFontSize() + textBounds.top) < ((GetWidgetPosition().y + shape.getSize().y) - margin.y * 0.5))
         inLimits = true;
 
-//    printf("X: [%0.2f < %0.2f], Y: [%0.2f < %0.2f] == %s\n", textBounds.width, (shape.getSize().x - margin.x * 1.5), (defaultFontSize + textBounds.top), ((GetWidgetCoordinates().y + shape.getSize().y) - margin.y * 0.5), inLimits ? "true" : "false");
+//    printf("X: [%0.2f < %0.2f], Y: [%0.2f < %0.2f] == %s\n", textBounds.width, (shape.getSize().x - margin.x * 1.5), (defaultFontSize + textBounds.top), ((GetWidgetPosition().y + shape.getSize().y) - margin.y * 0.5), inLimits ? "true" : "false");
 
     return inLimits;
 }
