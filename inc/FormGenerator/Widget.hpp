@@ -43,8 +43,8 @@ class fg::Widget
         /* Destructor. */
         virtual ~Widget() {}
 
-        /* Pure Virtual functions. */
-        virtual void Draw(sf::RenderWindow& window) = 0;
+        /* Virtual functions. */
+        virtual void Draw(sf::RenderWindow& window);
         virtual bool IsMouseOver(const sf::RenderWindow& window) = 0;
         virtual void TakeAction() = 0;
         virtual bool IsLive() = 0;
@@ -66,10 +66,11 @@ class fg::Widget
 
         /* Getter functions. */
         sf::FloatRect   GetWidgetTitleBounds()  { return widgetText.getLocalBounds(); }
-        sf::Text        GetWidgetText()         { return widgetText; }
+        sf::Text&       GetWidgetText()         { return widgetText; }
         sf::Color       GetWidgetColor()        { return widgetColor; }
         sf::Color       GetWidgetTextColor()    { return widgetTextColor; }
-        sf::Vector2f&   GetWidgetPosition()     { return position; }
+        sf::Vector2f    GetWidgetPosition()     { return position; }
+        sf::Vector2f    GetWidgetDimension()    { return dimension; }
 
         /* Static functions. */
         static std::string  GetWidgetParamStr(Param param);
@@ -91,9 +92,9 @@ class fg::Widget
         void SetWidgetPosition(sf::Vector2f pos)        { position = pos; }
         void SetWidgetDimension(sf::Vector2f dmn)       { dimension = dmn; }
 
-        uint16_t GetDefaultFontSize() { return globalFontSize; }
-        sf::Font& GetDefaultFont();
-        sf::Event& GetCurrentEvent() { return event; }
+        sf::Font& GetWidgetFont()                       { return font; }
+        uint16_t GetWidgetFontSize()                    { return widgetTextFontSize; }
+        sf::Event& GetCurrentEvent()                    { return event; }
 
         void PositionWidgetTextAtCenter();
 

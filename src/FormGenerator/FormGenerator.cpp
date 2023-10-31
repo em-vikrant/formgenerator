@@ -123,6 +123,7 @@ void fg::FormGenerator::Update()
 
                 case sf::Event::MouseButtonPressed:
                 case sf::Event::MouseButtonReleased:
+                case sf::Event::MouseMoved:
                 case sf::Event::TextEntered:
                     {
                         for (auto key : widgetKeys)

@@ -30,8 +30,6 @@ class fg::Title : public fg::Widget
         Title(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
 
         /* Functions. */
-        void Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
-        void Draw(sf::RenderWindow& window) override;
         bool IsMouseOver(const sf::RenderWindow& window) override;
         void TakeAction() override;
 
