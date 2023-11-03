@@ -63,7 +63,7 @@ void fg::TextBox::Draw(sf::RenderWindow& window)
     window.draw(shape);
     
     /* Display widget title. */
-    if (IsWidgetTitleEnabled() == true)
+    if (IsWidgetTextEnabled() == true)
     {
         window.draw(GetWidgetText());
     }
@@ -94,7 +94,7 @@ void fg::TextBox::TakeAction()
         TrySetInlineText(inputString + cursorChar);
 
         /* Disable widget title. */
-        DisableWidgetTitle();
+        DisableWidgetText();
     }
     /* If clicked outside of the text box area. */
     else if (isSelected && IsMouseClicked() == false)

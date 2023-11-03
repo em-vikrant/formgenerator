@@ -46,7 +46,7 @@ void fg::Widget::Draw(sf::RenderWindow& window)
     window.draw(*pShape);
     
     /* Display widget title. */
-    if (IsWidgetTitleEnabled() == true)
+    if (IsWidgetTextEnabled() == true)
     {
         window.draw(GetWidgetText());
     }
@@ -67,7 +67,7 @@ void fg::Widget::SetWidgetText(std::string sText, sf::Color textColor)
             /* Positioning of text at widget's center. */
             PositionWidgetTextAtCenter();
 
-            EnableWidgetTitle();
+            EnableWidgetText();
         }
         else
         {
@@ -81,16 +81,6 @@ void fg::Widget::SetWidgetText(std::string sText, sf::Color textColor)
     {
         throw;
     }
-}
-
-void fg::Widget::SetWidgetTitleOrigin(float xPos, float yPos)
-{
-    widgetText.setOrigin(xPos, yPos);
-}
-
-void fg::Widget::SetWidgetTitlePosition(float xPos, float yPos)
-{
-    widgetText.setPosition(xPos, yPos);
 }
 
 void fg::Widget::SetWidgetInitText(const std::string& sText)
@@ -110,9 +100,9 @@ void fg::Widget::SetWidgetTextFontSize(int size)
 
 void fg::Widget::PositionWidgetTextAtCenter()
 {
-    sf::FloatRect titleBounds = GetWidgetTitleBounds();
-    SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
-    SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
+    sf::FloatRect titleBounds = GetWidgetTextBounds();
+    widgetText.setOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
+    widgetText.setPosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
 }
 
 void fg::Widget::SetMouseState(bool state)

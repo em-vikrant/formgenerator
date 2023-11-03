@@ -22,7 +22,6 @@
 namespace fg
 {
     class Widget;
-    struct Color;
 }
 
 
@@ -51,10 +50,10 @@ class fg::Widget
         virtual void UnLive() = 0;
 
         /* Helper functions. */
-        inline void DisableWidgetTitle()    { isTitleEnable = false; }
-        inline void EnableWidgetTitle()     { isTitleEnable = true; }
+        inline void DisableWidgetText()     { isTextEnable = false; }
+        inline void EnableWidgetText()      { isTextEnable = true; }
 
-        inline bool IsWidgetTitleEnabled()  { return isTitleEnable; }
+        inline bool IsWidgetTextEnabled()   { return isTextEnable; }
         inline bool IsMouseClicked()        { return mouseClicked; }
         inline bool IsMouseHover()          { return mouseHovered; }
         inline bool IsMouseReleased()       { return mouseReleased; }
@@ -65,7 +64,7 @@ class fg::Widget
         void SetWidgetInitText(const std::string& sText);
 
         /* Getter functions. */
-        sf::FloatRect   GetWidgetTitleBounds()  { return widgetText.getLocalBounds(); }
+        sf::FloatRect   GetWidgetTextBounds()   { return widgetText.getLocalBounds(); }
         sf::Text&       GetWidgetText()         { return widgetText; }
         sf::Color       GetWidgetColor()        { return widgetColor; }
         sf::Color       GetWidgetTextColor()    { return widgetTextColor; }
@@ -85,8 +84,6 @@ class fg::Widget
         /* Functions to be used by widgets. */
         void SetWidgetText(std::string sText, sf::Color textColor);
 
-        void SetWidgetTitleOrigin(float xPos, float yPos);
-        void SetWidgetTitlePosition(float xPos, float yPos);
         void SetWidgetTextFontSize(int size);
         void SetWidgetColor(sf::Color color)            { widgetColor = color; }
         void SetWidgetPosition(sf::Vector2f pos)        { position = pos; }
@@ -99,27 +96,27 @@ class fg::Widget
         void PositionWidgetTextAtCenter();
 
         /* Protected data member. */
-        std::shared_ptr<sf::Shape>       pShape;    /*! Shape pointer. */
+        std::shared_ptr<sf::Shape> pShape;      /*! Shape pointer. */
 
     private:
         std::string     sWidgetText;            /*! Text displayed on the widget. */
         sf::Text        widgetText;             /*! SFML Object for widget text. */
         sf::Vector2f    position;               /*! Position vector. */
         sf::Vector2f    dimension;              /*! Dimension vector. */
-        sf::Color       widgetColor;            /*! Widget title color. */
-        sf::Color       widgetTextColor;        /*! Widget title color. */
-        int             widgetTextFontSize;     /*! Text title size of widget. */
+        sf::Color       widgetColor;            /*! Widget background color. */
+        sf::Color       widgetTextColor;        /*! Widget text color. */
+        int             widgetTextFontSize;     /*! Font size of widget text. */
 
-        bool        isTitleEnable = false;      /*! Flag that get set when title is enabled / disabled. */
-        sf::Font    font;                       /*! Widget title font. */
-        bool        isFontSet = false;          /*! Flag that get when font is loaded. */
-        sf::Event   event;                      /*! Current event, used when relevant to the widget. */
+        bool            isTextEnable = false;   /*! Flag to check if initial text is enabled. */
+        sf::Font        font;                   /*! Widget text font. */
+        bool            isFontSet = false;      /*! Flag to check if font is loaded. */
+        sf::Event       event;                  /*! Current event. */
 
         /* Global members for all instances. */
         static std::string  globalFontName;
         static uint16_t     globalFontSize;
 
-        /* Mouse flags. */
+        /* Mouse event flags. */
         bool        mouseClicked;               /*! Mouse clicked status for a widget. */
         bool        mouseHovered;               /*! Mouse hovering status for a widget. */
         bool        mouseReleased;              /*! Mouse released status for a widget. */
