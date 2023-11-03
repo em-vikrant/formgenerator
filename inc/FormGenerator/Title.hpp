@@ -1,9 +1,9 @@
-/* File: Button.hpp
- * Header file for button class.
+/* File: Title.hpp
+ * Header file for title class.
  */
 
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef TITLE_H
+#define TITLE_H
 
 /* STD includes. */
 #include <string>
@@ -18,16 +18,16 @@
 
 namespace fg
 {
-    class Button;
+    class Title;
 }
 
-/* Brief: Button class. */
-class fg::Button : public fg::Widget
+/* Brief: Title class. */
+class fg::Title : public fg::Widget
 {
     public:
         /* Constructor. */
-        Button() : Widget() { isLive = false; }
-        Button(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
+        Title() : Widget() { isLive = false; }
+        Title(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
 
         /* Functions. */
         bool IsMouseOver(const sf::RenderWindow& window) override;
@@ -40,4 +40,4 @@ class fg::Button : public fg::Widget
         bool isLive;
 };
 
-#endif // BUTTON_H
+#endif // TITLE_H

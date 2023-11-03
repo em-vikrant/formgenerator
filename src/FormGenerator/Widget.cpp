@@ -27,6 +27,29 @@ fg::Widget::Widget()
     {
         isFontSet = true;
     }
+
+    /* Set widget text font size. */
+    widgetTextFontSize = globalFontSize;
+}
+
+fg::Widget::Widget(sf::Vector2f _position, sf::Vector2f _dimension)
+    : Widget()
+{
+    /* Set the position and dimension vector. */
+    position = _position;
+    dimension = _dimension;
+}
+
+void fg::Widget::Draw(sf::RenderWindow& window)
+{
+    /* Display widget. */
+    window.draw(*pShape);
+    
+    /* Display widget title. */
+    if (IsWidgetTextEnabled() == true)
+    {
+        window.draw(GetWidgetText());
+    }
 }
 
 void fg::Widget::SetWidgetText(std::string sText, sf::Color textColor)
@@ -37,11 +60,14 @@ void fg::Widget::SetWidgetText(std::string sText, sf::Color textColor)
         {
             widgetText.setFont(font);
             widgetText.setString(sText);
-            widgetText.setCharacterSize(globalFontSize);
+            widgetText.setCharacterSize(widgetTextFontSize);
             widgetText.setFillColor(textColor);
             widgetTextColor = textColor;
 
-            EnableWidgetTitle();
+            /* Positioning of text at widget's center. */
+            PositionWidgetTextAtCenter();
+
+            EnableWidgetText();
         }
         else
         {
@@ -57,30 +83,26 @@ void fg::Widget::SetWidgetText(std::string sText, sf::Color textColor)
     }
 }
 
-void fg::Widget::SetWidgetTitleOrigin(float xPos, float yPos)
-{
-    widgetText.setOrigin(xPos, yPos);
-}
-
-void fg::Widget::SetWidgetTitlePosition(float xPos, float yPos)
-{
-    widgetText.setPosition(xPos, yPos);
-}
-
 void fg::Widget::SetWidgetInitText(const std::string& sText)
 {
     sWidgetText = sText;
     widgetText.setString(sWidgetText);
+
+    /* Positioning of text at widget's center. */
+    PositionWidgetTextAtCenter();
 }
 
 void fg::Widget::SetWidgetTextFontSize(int size)
 {
     widgetTextFontSize = size;
+    widgetText.setCharacterSize(widgetTextFontSize);
 }
 
-sf::Font& fg::Widget::GetDefaultFont()
+void fg::Widget::PositionWidgetTextAtCenter()
 {
-    return font;
+    sf::FloatRect titleBounds = GetWidgetTextBounds();
+    widgetText.setOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
+    widgetText.setPosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
 }
 
 void fg::Widget::SetMouseState(bool state)
@@ -115,10 +137,6 @@ std::string fg::Widget::GetWidgetParamStr(fg::Widget::Param param)
             sParam.assign("clr");
             break;
 
-        case Param::COLORHEX:
-            sParam.assign("clh");
-            break;
-
         case Param::TEXT_COLOR:
             sParam.assign("tclr");
             break;
@@ -143,8 +161,6 @@ fg::Widget::Param fg::Widget::GetWidgetParam(const std::string& sParam)
         param = Param::DIMENSION;
     else if (sParam == "clr")
         param = Param::COLOR;
-    else if (sParam == "clh")
-        param = Param::COLORHEX;
     else if (sParam == "tclr")
         param = Param::TEXT_COLOR;
     else
@@ -167,6 +183,8 @@ fg::Widget::Type fg::Widget::GetWidgetType(const std::string& sType)
         type = Widget::Type::BUTTON;
     else if (_sType == "textbox")
         type = Widget::Type::TEXTBOX;
+    else if (_sType == "title")
+        type = Widget::Type::TITLE;
 
     return type;
 }
@@ -189,7 +207,6 @@ sf::Color fg::Widget::GetSFMLColor(const std::string& sColor)
         _sColor = _sColor.substr(_sColor.find(":") + 1);
 
         sfColor.a = std::stoi(_sColor);
-        printf("SFML COLOR, %d, %d, %d, %d\n", sfColor.r, sfColor.g, sfColor.b, sfColor.a);
     }
     else
     {

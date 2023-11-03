@@ -24,7 +24,7 @@ namespace fg
 class fg::WidgetManager
 {
     public:
-        void AddWidget(std::string name, 
+        bool AddWidget(std::string name, 
             std::vector<std::pair<std::string, std::string>> configList);
 
         std::shared_ptr<fg::Widget> operator[](const std::string& name);

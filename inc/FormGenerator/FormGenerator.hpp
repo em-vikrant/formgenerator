@@ -61,7 +61,7 @@ class fg::FormGenerator
 
         std::shared_ptr<fg::utils::Config> pConfig;
         fg::WidgetManager   oWidgetManager;
-        std::vector<std::string> widgetKeys;
+        std::vector<std::pair<std::string, bool>> widgetKeys;
 };
 
 #endif // FORM_GENERATOR_H

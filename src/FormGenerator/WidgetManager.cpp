@@ -12,10 +12,11 @@
 /* FG includes. */
 #include <FormGenerator/Button.hpp>
 #include <FormGenerator/TextBox.hpp>
+#include <FormGenerator/Title.hpp>
 #include <FormGenerator/WidgetManager.hpp>
 
 
-void fg::WidgetManager::AddWidget(std::string name, 
+bool fg::WidgetManager::AddWidget(std::string name, 
     std::vector<std::pair<std::string, std::string>> configParamList)
 {
     fg::Widget::Type widgetType;
@@ -23,6 +24,7 @@ void fg::WidgetManager::AddWidget(std::string name,
     sf::Vector2f dimension;
     sf::Color widgetColor;
     sf::Color textColor;
+    bool ret = true;
 
     for (auto cPair : configParamList) 
     {
@@ -34,7 +36,6 @@ void fg::WidgetManager::AddWidget(std::string name,
                 break;
 
             case fg::Widget::Param::COLOR:
-            case fg::Widget::Param::COLORHEX:
                 widgetColor = fg::Widget::GetSFMLColor(cPair.second);
                 break;
             
@@ -60,6 +61,12 @@ void fg::WidgetManager::AddWidget(std::string name,
         widgetMap.emplace(name, std::make_shared<fg::Button>(position, dimension, widgetColor, textColor));
     else if (widgetType == fg::Widget::Type::TEXTBOX)
         widgetMap.emplace(name, std::make_shared<fg::TextBox>(position, dimension, widgetColor, textColor));
+    else if (widgetType == fg::Widget::Type::TITLE)
+        widgetMap.emplace(name, std::make_shared<fg::Title>(position, dimension, widgetColor, textColor));
+    else
+        ret = false;
+    
+    return ret;
 }
 
 std::shared_ptr<fg::Widget> fg::WidgetManager::operator[](const std::string& name)

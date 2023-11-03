@@ -14,17 +14,21 @@ fg::TextBox::TextBox()
     : Widget()
 {
     isLive = false;
-    cursorChar = std::string(1, fg::CURSOR_CHAR);
-    inputString = std::string("");
-    margin = {xMargin, yMargin};
-    limit = {0, 0};
 }
 
-fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor) :
-    fg::TextBox()
+fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor) 
+    : fg::Widget(position, dimension)
 {
     try
     {
+        cursorChar = std::string(1, fg::CURSOR_CHAR);
+        inputString = std::string("");
+        margin = {xMargin, yMargin};
+
+        /* Creating shape for this widget. */
+        pShape = std::make_shared<sf::RectangleShape>();
+        sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
         /* Widget shape characterstics. */
         shape.setPosition(position);
         shape.setSize(dimension);
@@ -35,50 +39,12 @@ fg::TextBox::TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bg
         SetWidgetColor(bgColor);
         SetWidgetText("TextBox", textColor);
 
-        sf::FloatRect titleBounds = GetWidgetTitleBounds();
-        SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
-        SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
-
         /* Inline text characterstics. */
-        SetWidgetCoordinates(position);
-        AddEntryToTextVec(inputString);
+        SetTextParms(inlineText, inputString, position + margin); 
 
-        /* Make the button live. */
+        /* Make the textbox widget live & unselected by default. */
         isLive = true;
-    }
-    catch(std::exception& e)
-    {
-        std::ostringstream oss;
-        oss << "CAUGHT AT [" << __func__ << ":" << __LINE__ << "]\n";
-        oss << "\tINFO " << e.what();
-        std::cout << oss.str() << std::endl;
-    }
-}
-
-void fg ::TextBox::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor)
-{
-    try
-    {
-        /* Widget shape characterstics. */
-        shape.setPosition(position);
-        shape.setSize(dimension);
-        shape.setOutlineColor(sf::Color::Black);
-        shape.setOutlineThickness(1);
-        shape.setFillColor(bgColor);
-        
-        SetWidgetColor(bgColor);
-        SetWidgetText("TextBox", textColor);
-
-        sf::FloatRect titleBounds = GetWidgetTitleBounds();
-        SetWidgetTitleOrigin(titleBounds.left + titleBounds.width / 2.0f, titleBounds.top + titleBounds.height / 2.0f);
-        SetWidgetTitlePosition(position.x + dimension.x / 2.0f, position.y + dimension.y / 2.0f);
-
-        /* Inline text characterstics. */
-        SetWidgetCoordinates(position);
-        AddEntryToTextVec(inputString);
-
-        /* Make the button live. */
-        isLive = true;
+        isSelected = false;
     }
     catch(std::exception& e)
     {
@@ -91,23 +57,26 @@ void fg ::TextBox::Create(sf::Vector2f position, sf::Vector2f dimension, sf::Col
 
 void fg::TextBox::Draw(sf::RenderWindow& window)
 {
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
     /* Display widget. */
     window.draw(shape);
     
     /* Display widget title. */
-    if (IsWidgetTitleEnabled() == true)
+    if (IsWidgetTextEnabled() == true)
     {
         window.draw(GetWidgetText());
     }
     else
     {
-        for (auto text : textVec)
-            window.draw(text);
+        window.draw(inlineText);
     }
 }
 
 bool fg::TextBox::IsMouseOver(const sf::RenderWindow& window)
 {
+    sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
+
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
     sf::Vector2f buttonPos = shape.getPosition();
     sf::Vector2f buttonSize = shape.getSize();
@@ -118,124 +87,98 @@ bool fg::TextBox::IsMouseOver(const sf::RenderWindow& window)
 
 void fg::TextBox::TakeAction()
 {
-    static bool IsEnabledForWriting = false;
-
     /* Check and enable text box for text entering. */
-    if (IsEnabledForWriting == false && IsMouseClicked() == true)
+    if (!isSelected && IsMouseClicked() == true)
     {
-        IsEnabledForWriting = true;
-        SetTextVecAtEnd(inputString + cursorChar);
+        isSelected = true;
+        TrySetInlineText(inputString + cursorChar);
 
         /* Disable widget title. */
-        DisableWidgetTitle();
+        DisableWidgetText();
     }
     /* If clicked outside of the text box area. */
-    else if (IsMouseClicked() == false)
+    else if (isSelected && IsMouseClicked() == false)
     {
-        IsEnabledForWriting = false;
-        SetTextVecAtEnd(inputString);
+        isSelected = false;
+        TrySetInlineText(inputString);
     }
     
     /* Handle text event for the text box. */
     sf::Event& event = GetCurrentEvent();
-    if (IsEnabledForWriting == true && event.type == sf::Event::TextEntered)
+    if (isSelected && event.type == sf::Event::TextEntered)
     {
         unsigned int charCode = event.text.unicode;
         if (charCode < 128)
         {
-            inputString = std::string(textVec.back().getString());
             if (charCode == fg::KEY_BACKSPACE)
             {
                 if (!inputString.empty())
                 {
                     inputString.pop_back();
-
-                    if (!inputString.empty())
-                        inputString.pop_back();
-
-                    SetTextVecAtEnd(inputString);
                 }
-
-                if (inputString.empty() && textVec.size() > 1)
-                    textVec.pop_back();
-            }
-            else if (charCode == fg::KEY_ENTER)
-            {
-                inputString.pop_back();
-                SetTextVecAtEnd(inputString);
-
-                AddEntryToTextVec(std::string(""));
             }
             else
             {
-                inputString.pop_back();
+                /* In case a carriage-return. Change code to new line. */
+                if (charCode == fg::KEY_ENTER)
+                    charCode = fg::KEY_NEWLINE;
+
                 inputString += static_cast<char>(charCode);
-                SetTextVecAtEnd(inputString);
             }
 
-            SetTextVecAtEnd(textVec.back().getString() + cursorChar);
+            /* Set the inline text. */
+            if (TrySetInlineText(inputString + cursorChar) == false)
+                inputString.pop_back(); // Remove the extra char added
         }
-    }
-}
-
-void fg::TextBox::SetTextParms(sf::Text& text, std::string& input, sf::Vector2f coordinates)
-{
-    text.setFont(GetDefaultFont());
-    text.setCharacterSize(GetDefaultFontSize());
-    text.setFillColor(GetWidgetTextColor());
-    text.setString(input);
-
-    sf::FloatRect inlineTextBounds = text.getLocalBounds();
-    text.setOrigin(inlineTextBounds.left + inlineTextBounds.width / 2.0f, inlineTextBounds.top + inlineTextBounds.height / 2.0f);
-    text.setPosition(static_cast<int>(coordinates.x), static_cast<int>(coordinates.y));
-}
-
-void fg::TextBox::AddEntryToTextVec(std::string input)
-{
-    sf::Text newLineText;
-    sf::Vector2f& coord = GetWidgetCoordinates();
-
-    if (textVec.empty())
-    {
-        SetTextParms(newLineText, input, coord + margin);
-    }
-    else
-    {
-        sf::Vector2f textCoords{
-            coord.x + margin.x,
-            coord.y + (GetDefaultFontSize() + 1.0f) * textVec.size() + margin.y
-        };
-        SetTextParms(newLineText, input, textCoords);
-    }
-
-    if (IsTextInLimits(newLineText))
-    {
-        textVec.push_back(newLineText);
     }
 }
 
 bool fg::TextBox::IsTextInLimits(const sf::Text& text)
 {
     bool inLimits = false;
+    std::string s = text.getString();
+
+    uint16_t xLim = static_cast<uint16_t>(GetWidgetDimension().x - margin.x * 2.0);
+    uint16_t yLim = static_cast<uint16_t>(GetWidgetDimension().y - margin.x * 2.0);
 
     sf::FloatRect textBounds = text.getGlobalBounds();
 
-    if (textBounds.width < (shape.getSize().x - margin.x * 1.5) &&
-       (GetDefaultFontSize() + textBounds.top) < ((GetWidgetCoordinates().y + shape.getSize().y) - margin.y * 0.5))
+    uint16_t xChars = static_cast<uint16_t>(textBounds.width);
+    uint16_t yChars = static_cast<uint16_t>(textBounds.height);
+
+    if (xChars <= xLim && yChars <= yLim)
         inLimits = true;
 
-//    printf("X: [%0.2f < %0.2f], Y: [%0.2f < %0.2f] == %s\n", textBounds.width, (shape.getSize().x - margin.x * 1.5), (defaultFontSize + textBounds.top), ((GetWidgetCoordinates().y + shape.getSize().y) - margin.y * 0.5), inLimits ? "true" : "false");
-
+    //printf("XCH, %d, XLIM, %d, YCH, %d, YLIM, %d\n", xChars, xLim, yChars, yLim);
+    
     return inLimits;
 }
 
-void fg::TextBox::SetTextVecAtEnd(std::string input)
+void fg::TextBox::SetTextParms(sf::Text& text, std::string& input, sf::Vector2f coordinates)
 {
-    sf::Text text = textVec.back();
+    text.setFont(GetWidgetFont());
+    text.setCharacterSize(GetWidgetFontSize());
+    text.setFillColor(GetWidgetTextColor());
+    text.setString(input);
+
+    sf::FloatRect inlineTextBounds = text.getLocalBounds();
+    text.setOrigin(inlineTextBounds.left + inlineTextBounds.width / 2.0f, 
+            inlineTextBounds.top + inlineTextBounds.height / 2.0f);
+    text.setPosition(static_cast<int>(coordinates.x), static_cast<int>(coordinates.y));
+}
+
+bool fg::TextBox::TrySetInlineText(std::string input)
+{
+    sf::Text text = inlineText;
     text.setString(input);
 
     if (IsTextInLimits(text))
-        textVec.back().setString(input);
+    {
+        inlineText.setString(input);
+        return true;
+    }
+
+    return false;
 }
 
 

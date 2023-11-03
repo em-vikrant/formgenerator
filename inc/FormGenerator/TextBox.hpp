@@ -30,7 +30,8 @@ namespace fg
     enum Key
     {
         KEY_BACKSPACE   = 0x08,
-        KEY_ENTER       = 0x0D
+        KEY_ENTER       = 0x0D,
+        KEY_NEWLINE     = 0x0A
     };
 }
 
@@ -43,7 +44,6 @@ class fg::TextBox : public fg::Widget
         TextBox(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
 
         /* Functions. */
-        void Create(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColor, sf::Color textColor);
         void Draw(sf::RenderWindow& window) override;
         bool IsMouseOver(const sf::RenderWindow& window) override;
         void TakeAction() override;
@@ -52,20 +52,17 @@ class fg::TextBox : public fg::Widget
         inline void UnLive() override { isLive = false; }
 
     private:
-        sf::RectangleShape shape;
         sf::Text inlineText;
         std::vector<sf::Text> textVec;
-        sf::Color color;
         std::string inputString;
         std::string cursorChar;
         bool isLive;
+        bool isSelected;
 
         sf::Vector2f margin;
-        sf::Vector2f limit;
         
         void SetTextParms(sf::Text& text, std::string& input, sf::Vector2f coordinate);
-        void AddEntryToTextVec(std::string input);
-        void SetTextVecAtEnd(std::string input);
+        bool TrySetInlineText(std::string input);
         bool IsTextInLimits(const sf::Text& text);
 };
 
