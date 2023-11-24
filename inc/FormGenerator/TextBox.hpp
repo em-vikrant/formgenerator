@@ -53,7 +53,6 @@ class fg::TextBox : public fg::Widget
 
     private:
         sf::Text inlineText;
-        std::vector<sf::Text> textVec;
         std::string inputString;
         std::string cursorChar;
         bool isLive;

@@ -181,4 +181,3 @@ bool fg::TextBox::TrySetInlineText(std::string input)
     return false;
 }
 
-

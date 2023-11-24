@@ -1,12 +1,12 @@
 // This is a example file to check the FormGenerator library
 #include <iostream>
 #include <FormGenerator/FormGenerator.hpp>
+#include <FormGenerator/Utils/Logger.hpp>
 
 
 int main(int argc, char *argv[])
 {
     fg::FormGenerator form(argv[0]);
-    std::cout << "Test App" << std::endl;
 
     form.SetWidgetInitText("H0", "Registration Form");
     

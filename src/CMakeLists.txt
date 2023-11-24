@@ -6,21 +6,13 @@ set(SRCROOT ${PROJECT_SOURCE_DIR}/FormGenerator)
 
 # All source files
 set(SRC
-    ${INCROOT}/FormGenerator/Widget.hpp
     ${SRCROOT}/Widget.cpp
-    ${INCROOT}/FormGenerator/Button.hpp
     ${SRCROOT}/Button.cpp
-    ${INCROOT}/FormGenerator/TextBox.hpp
     ${SRCROOT}/TextBox.cpp
-    ${INCROOT}/FormGenerator/Title.hpp
     ${SRCROOT}/Title.cpp
-    ${INCROOT}/FormGenerator/WidgetManager.hpp
     ${SRCROOT}/WidgetManager.cpp
-    ${INCROOT}/FormGenerator/FormGenerator.hpp
     ${SRCROOT}/FormGenerator.cpp
-    ${INCROOT}/FormGenerator/Utils/Config.hpp
     ${SRCROOT}/Utils/Config.cpp
-    ${INCROOT}/FormGenerator/Utils/Json.hpp
     ${SRCROOT}/Utils/Json.cpp
     )
 

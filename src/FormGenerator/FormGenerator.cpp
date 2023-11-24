@@ -9,13 +9,18 @@
 #include <FormGenerator/Button.hpp>
 #include <FormGenerator/TextBox.hpp>
 #include <FormGenerator/FormGenerator.hpp>
+#include <FormGenerator/Utils/Logger.hpp>
 
 
 fg::FormGenerator::FormGenerator(std::string sAppPath)
     : formTitle("Untitled"), isLive(false), configFlag(false)
 {
+    /* Get app name from the application path. */
     sAppName = sAppPath;
     sAppName = sAppName.substr(sAppName.find_last_of("/") + 1);
+    sAppName = sAppName.substr(0, sAppName.find_last_not_of(" \t\r\n") + 1);
+
+    LOG("APPLICATION : %s\r\n", sAppName);
 
     /* Configure the project. */
     pConfig = std::make_shared<fg::utils::Config>();
