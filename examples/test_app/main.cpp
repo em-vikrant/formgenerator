@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 {
     fg::FormGenerator form(argv[0]);
 
+    // Initial setting of form
     form.SetWidgetInitText("H0", "Registration Form");
     
     form.SetWidgetInitText("H1", "Name");
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 
     form.SetWidgetInitText("B1", "Submit");
 
+    // Form creation
     if (form.Create("Test App"))
     {
         while (form.IsLive() == true)

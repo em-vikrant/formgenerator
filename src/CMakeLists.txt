@@ -12,8 +12,14 @@ set(SRC
     ${SRCROOT}/Title.cpp
     ${SRCROOT}/WidgetManager.cpp
     ${SRCROOT}/FormGenerator.cpp
+
+    # Utils section
     ${SRCROOT}/Utils/Config.cpp
     ${SRCROOT}/Utils/Json.cpp
+
+    # Backend section
+    ${SRCROOT}/Backend/Property.cpp
+    ${SRCROOT}/Backend/WidgetBinder.cpp
     )
 
 # Add library

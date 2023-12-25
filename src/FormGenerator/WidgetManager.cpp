@@ -80,3 +80,12 @@ void fg::WidgetManager::SetGlobalFontParms(const std::string& font, uint16_t fon
     fg::Widget::SetGlobalFontSize(fontSize);
 }
 
+void fg::WidgetManager::SetProperty(const fg::Backend::Property& property)
+{
+    oProperty = property;
+}
+
+void fg::WidgetManager::SetWidgetBinder(const fg::Backend::WidgetBinder& widgetBindings)
+{
+    oWidgetBinder = widgetBindings;
+}

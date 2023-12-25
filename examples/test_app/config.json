@@ -3,6 +3,7 @@
     "fdm" : "800:600",
     "fnt" : "calibri",
     "fsz" : "15",
+    "fclr" : "235:209:227:255",
     "H0" : {
         "typ" : "title",
         "clr" : "white",

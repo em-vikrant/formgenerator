@@ -6,9 +6,8 @@
 #include <iostream>
 
 /* FG includes. */
-#include <FormGenerator/Button.hpp>
-#include <FormGenerator/TextBox.hpp>
 #include <FormGenerator/FormGenerator.hpp>
+#include <FormGenerator/Widget.hpp>
 #include <FormGenerator/Utils/Logger.hpp>
 
 
@@ -36,6 +35,9 @@ fg::FormGenerator::FormGenerator(std::string sAppPath)
         /* Get the font & font size. */
         std::string font = pConfig->GetValueFromKey("fnt");
         uint16_t fontSize = std::stoi(pConfig->GetValueFromKey("fsz"));
+
+        /* Get background color. */
+        color = fg::Widget::GetSFMLColor(pConfig->GetValueFromKey("fclr"));
 
         /* Set gloabl font parameters for widgets. */
         oWidgetManager.SetGlobalFontParms(font, fontSize);
@@ -68,6 +70,20 @@ void fg::FormGenerator::SetWidgetInitText(const std::string sWidgetKey, const st
     }
 }
 
+void fg::FormGenerator::ApplyWidgetProperty(const fg::Backend::Property& property)
+{
+    LOG("APPLYING WIDGET PROPERTIES AT BACKEND\n");
+
+    oWidgetManager.SetProperty(property);
+}
+
+void fg::FormGenerator::ApplyWidgetBindings(const fg::Backend::WidgetBinder& widgetBindings)
+{
+    LOG("APPLYING WIDGET BINDINGS AT BACKEND\n");
+
+    oWidgetManager.SetWidgetBinder(widgetBindings);
+}
+
 bool fg::FormGenerator::Create(std::string title)
 {
     bool ret = false;
@@ -89,7 +105,7 @@ bool fg::FormGenerator::Create(std::string title)
 void fg::FormGenerator::Display()
 {
     /* Fill the from with background color. */
-    formWindow.clear(sf::Color::White);
+    formWindow.clear(color);
 
     /* Draw widgets on form. */
     for (auto key : widgetKeys)

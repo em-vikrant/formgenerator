@@ -20,7 +20,7 @@ fg::Title::Title(sf::Vector2f position, sf::Vector2f dimension, sf::Color bgColo
         sf::RectangleShape& shape = *std::dynamic_pointer_cast<sf::RectangleShape>(pShape);
 
         shape.setPosition(position);
-        shape.setSize(dimension);
+        shape.setSize({0, 0});          // Emulates only text is there.
         shape.setFillColor(bgColor);
         
         SetWidgetColor(bgColor);
